@@ -6,3 +6,5 @@ OK, julius is still trying to figure out how to push.  did i push a change this 
 
 Nathan was here using Git Bash on Windows 10.
 Nathan was here on Web editing.
+Nathan editing locally with vim.
+
