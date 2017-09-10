@@ -1,14 +1,6 @@
 -Course Project for JHU 605.401 Fall 2017, team Battleware
--
--Paul was here!
--
--OK, julius is still trying to figure out how to push.  did i push a change this time? i would guess, yes.
--
--Nathan was here using Git Bash on Windows 10.
--Nathan was here on Web editing.
+Course Project for JHU 605.401 Fall 2017, team Battleware
 
--Course Project for JHU 605.401 Fall 2017, team Battleware
--
 -Paul was here!
 -
 -OK, julius is still trying to figure out how to push.  did i push a change this time? i would guess, yes.
