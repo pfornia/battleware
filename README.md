@@ -1,4 +1,3 @@
-# battleware
 Course Project for JHU 605.401 Fall 2017, team Battleware
 
 High-level questions:
@@ -24,3 +23,4 @@ Resources:
         https://gafferongames.com/post/what_every_programmer_needs_to_know_about_game_networking/
 
     
+
