@@ -5,9 +5,9 @@ class Card(object):
         cardType: 
     
     """
-    def __init__(self, thisPlayer, thisType):
+    def __init__(self, subject, thisType):
         self.cardType = thisType
-        self.name = thisPlayer
+        self.subject = subject
         print("created a new card.")
 
 class CardController(object):
@@ -17,22 +17,31 @@ class CardController(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, players, locations, weapons):
         """Return an initialized Game object"""
         #player cards do not exist until players join
         self.playerCards = []
+        for p in players:
+            self.playerCards.append(Card(p, "P"))
         #todo: initialize weapons cards
         self.weaponsCards = []
+        for w in weapons:
+            self.weaponsCards.append(Card(w, "W"))
         #todo: initialize room cards
         self.roomCards = []
+        for l in locations:
+            if l.isRoom:
+                self.roomCards.append(Card(l, "R"))
+
         
-        #self.caseEnvelope = ??
+        #self.createCaseFile() ??
+        
+        #self.distributeCards(players) ??
         
         print("card controller initialized!")
         
-    def addPlayerCard(self, thisPlayer):
-        self.playerCards.append(Card(thisPlayer, "P"))
         
     #def createCaseFile(self):
-        #do nothing??   
+          
+    #def distributeCards(self, players):
         

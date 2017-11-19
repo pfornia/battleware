@@ -5,11 +5,15 @@ from game import Game
 
 thisGame = Game()
 
-for l in thisGame.locations:
-    print(l.name + " neigbors:")
-    for al in l.adjLocations:
-        print(al.name)
+#for l in thisGame.locations:
+    #print(l.isRoom)
         
 me1 = thisGame.addPlayer()
 
-print(me1.curLocation.name)
+print(me1.name)
+
+me2 = thisGame.addPlayer()
+
+print(me2.name)
+
+

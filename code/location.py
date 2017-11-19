@@ -35,6 +35,7 @@ class Room(Location):
         #initialize empty set of occupants
         self.occupants = []
         self.adjLocations = []
+        self.isRoom = True
 
         print("room initialized")
         
@@ -49,6 +50,7 @@ class Hallway(Location):
         #initialize empty set of occupants
         self.occupants = []
         self.adjLocations = []
-
+        self.isRoom = False
+        
         print("hallway initialized")
         

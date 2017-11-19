@@ -2,14 +2,24 @@ from card_controller import CardController
 from player import Player
 from location import Location, Room, Hallway
 
-PLAYER_NAMES = ("Miss Scarlet",
+# Global arrays indicating character names and initial locations
+PLAYER_NAMES = ["Miss Scarlet",
     "Col Mustard",
     "Mrs White",
     "Mr Green",
     "Mrs Peacock",
-    "Prof Plum")
+    "Prof Plum"]
     
+#location indices
 INITIAL_LOCATIONS = [10,13,20,19,16,11]
+
+#Weapons (need to be a class??)
+WEAPONS = ["Rope",
+    "Lead Pipe",
+    "Knife",
+    "Wrench",
+    "Candlestick",
+    "Revolver"]
 
 class Game(object):
     """An instance of a single game of "Clue-less"
@@ -30,6 +40,12 @@ class Game(object):
         #start with zero indexed player
         self.whosTurn = 0
         
+        self.initializeRooms()
+           
+        print("game initialized!")
+        
+
+    def initializeRooms(self):
         #Initialize complete list of all rooms and hallways
         self.locations = []
         self.locations.append(Room("Study"))
@@ -50,10 +66,9 @@ class Game(object):
         11      12      13
         3   14  4   15  5
         16      17      18
-        6   19  7   20  8
-         
-         
+        6   19  7   20  8         
         """
+        
         #Study:
         self.locations[0].addAdjLocation(self.locations[9])
         self.locations[0].addAdjLocation(self.locations[11])
@@ -88,14 +103,8 @@ class Game(object):
         self.locations[7].addAdjLocation(self.locations[20])                
         #Kitchen:
         self.locations[8].addAdjLocation(self.locations[18])
-        self.locations[8].addAdjLocation(self.locations[20])        
-        
-        
-        #todo: initialize CardControllerClass
-        self.cardController = CardController()
-        print("game initialized!")
-        
-
+        self.locations[8].addAdjLocation(self.locations[20])       
+    
     def addPlayer(self):
         """Adds player to game, by initializing
         player object into the player list and 
@@ -115,5 +124,8 @@ class Game(object):
         #???
         
     def initializeGame(self):
-        ## This is run once all players are signed in and ready to start... right?
+        #This is run once all players are signed in and ready to start... right?
+        self.cardController = CardController(self.players,
+            self.locations,
+            WEAPONS)
         self.cardController.distributeCards()
