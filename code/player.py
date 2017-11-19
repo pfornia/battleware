@@ -5,11 +5,11 @@ class Player(object):
 
     """
 
-    def __init__(self, name):
+    def __init__(self, name, location):
         """Return an initialized Player object"""
         self.name = name
         self.myCards = []
-        self.curLocation = "???" #how to initialize?
+        self.curLocation = location #how to initialize?
         
         print("player initialized")
         

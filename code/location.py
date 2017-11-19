@@ -14,12 +14,6 @@ class Location(object):
         
         print("location initialized")
         
-    def getOccupants(self):
-        return self.occupants
-            
-    def getAdjLocations(self):
-        return self.adjLocations
-        
     def addAdjLocation(self, location):
         """ add adjacency (in both directions)"""
         self.adjLocations.append(location)
