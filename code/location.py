@@ -22,9 +22,9 @@ class Location(object):
     def addOccupant(self, player):
         self.occupants.append(player)
     
-    def addOccupant(self, player):
-        self.occupants.append(player)
-        
+    def rmvOccupant(self, player):
+        #todo: remove occupant.
+        return
 
 class Room(Location):
     """A Room (type of Location)"""

@@ -16,4 +16,11 @@ me2 = thisGame.addPlayer()
 
 print(me2.name)
 
+me3 = thisGame.addPlayer()
 
+print(me3.name)
+
+
+print(me3.getLocation().name)
+thisGame.makeMove(me3, thisGame.locations[0])
+print(me3.getLocation().name)

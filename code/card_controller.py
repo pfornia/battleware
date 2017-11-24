@@ -34,14 +34,29 @@ class CardController(object):
                 self.roomCards.append(Card(l, "R"))
 
         
-        #self.createCaseFile() ??
+        self.createCaseFile()
         
-        #self.distributeCards(players) ??
+        self.distributeCards(players)
         
         print("card controller initialized!")
         
         
-    #def createCaseFile(self):
-          
-    #def distributeCards(self, players):
+    def createCaseFile(self):
+        #todo: make these random
+        self.caseEnvelope = []
+        self.caseEnvelope.append(playerCards[0])
+        self.caseEnvelope.append(weaponsCards[0])
+        self.caseEnvelope.append(roomCards[0])
+        
+    def distributeCards(self, players):
+        #todo: distribute the cards randomly:
+        #for all players???
+        #for all remaining cards???
+        players[0].addCard(playerCards[1])
+        players[0].addCard(weaponsCards[1])
+        players[0].addCard(roomCards[1])
+        
+    def checkAccusation(self, cardSet):
+        #todo: if all three cards in set are in caseEnvelope (in any order), return true
+        return False
         

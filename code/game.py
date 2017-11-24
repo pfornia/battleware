@@ -42,7 +42,7 @@ class Game(object):
         
         self.initializeRooms()
            
-        print("game initialized!")
+        print("game initialized! Waiting for players to join...")
         
 
     def initializeRooms(self):
@@ -125,7 +125,20 @@ class Game(object):
         
     def initializeGame(self):
         #This is run once all players are signed in and ready to start... right?
+        #Todo: anything else need to be here? Notify players?
         self.cardController = CardController(self.players,
             self.locations,
             WEAPONS)
         self.cardController.distributeCards()
+        
+        
+    def makeMove(self, player, location):
+        if self.isMoveLegal(player, location):
+            #make the move
+            player.move(location)
+            return True
+        return False
+        
+    def isMoveLegal(self, player, location):
+        #TODO: this.
+        return True

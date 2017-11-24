@@ -16,5 +16,18 @@ class Player(object):
     def getLocation(self):
         return self.curLocation
         
-    def move(location):
+    def move(self, location):
+        #todo: rmv from first location
+        
+        #update location
         self.curLocation = location
+        
+        #add self to location's occupant list
+        location.addOccupant(self)
+        
+        
+    def addCard(self, card):
+        self.myCards.append(card)
+        
+    def getCards(self):
+        return self.myCards
