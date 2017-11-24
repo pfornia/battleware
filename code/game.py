@@ -124,8 +124,8 @@ class Game(object):
         #???
         
     def initializeGame(self):
-        #This is run once all players are signed in and ready to start... right?
-        #Todo: anything else need to be here? Notify players?
+        #This is run once after all players are signed in and ready to start... right?
+        #Todo: anything else need to be here? Notify interfaces??
         self.cardController = CardController(self.players,
             self.locations,
             WEAPONS)
@@ -140,5 +140,20 @@ class Game(object):
         return False
         
     def isMoveLegal(self, player, location):
-        #TODO: this.
+        #todo: this.
         return True
+        
+    def makeSuggestion(self, suggester, suspect, room, weaponNum):
+        #todo: this.
+        return
+        
+    def makeAccusation(self, accuser, suspect, room, weaponNum):
+        #todo: this.
+        return
+        
+    def incrementTurn(self):
+        #If on last player, loop back to first player.
+        if whosTurn >= len(self.players) - 1:
+            whosTurn = 0
+        else:
+            whosTurn += 1
