@@ -1,6 +1,8 @@
 # May not need this file eventually.
 #  but useful for testing.
 
+#assume exactly 2 players.
+
 from game import Game
 
 thisGame = Game()

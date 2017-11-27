@@ -10,7 +10,7 @@ class Location(object):
         self.name = name
         #initialize empty set of occupants
         self.occupants = []
-        self.adjLocations = adjLocations
+        self.adjLocations = []
         
         print("location initialized")
         
