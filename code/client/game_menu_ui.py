@@ -76,12 +76,25 @@ class GameMenu(object):
         self.clock.tick(60)
     
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
-        
+            if event.type == pygame.QUIT: 
+                sys.exit()
+            elif event.type == MOUSEBUTTONDOWN:
+                
+                print("Clickity-click!")
+                
+                mouse = pygame.mouse.get_pos()
+                for l in range(len(self.locations)):
+                    if self.locations[l].rect.collidepoint(mouse):
+                        print(l)
+                
             self.screen.fill([0, 0, 0])
 
         for l in self.locations:
             self.screen.blit(l.image, l.rect)
+            
+            
+        #if pygame.mouse.get_pressed()[0]:
+        #    print("hello!")
             
         pygame.display.flip()
                 
@@ -91,6 +104,7 @@ class LocationIcon(object):
     """
     
     def __init__(self, coordX, coordY, iconFile):
+        self.name = iconFile
         self.image, self.rect = load_image(iconFile, -1)
         #self.rect.inflate_ip(-100, -100)
         self.rect.center = [coordX, coordY]
