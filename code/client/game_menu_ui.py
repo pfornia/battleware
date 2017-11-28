@@ -6,47 +6,85 @@ def main():
     from game_menu_ui import GameMenu
 
     thisUI = GameMenu()
-    
+
+    while 1:
+        thisUI.update()       
 
 
 class GameMenu(object):
     """
     GameMenu is the UI for the clue game (client side)
     
-    Many code snippets taken from pygame.org tutorials,
-        especially https://www.pygame.org/docs/tut/ChimpLineByLine.html
+    Many code snippets taken from 
+    
+    
+        pygame.org tutorials
+        (especially https://www.pygame.org/docs/tut/ChimpLineByLine.html),
+        https://www.raywenderlich.com/38732/multiplayer-game-programming-for-teens-with-python
+        and
+        https://www.raywenderlich.com/46843/multiplayer-game-programming-for-teens-with-python-part-2
     
     """
     
     def __init__(self):
         pygame.init()
-        size = width, height = 1000, 600
-        screen = pygame.display.set_mode(size)
+        self.size = width, height = 1000, 600
+        self.screen = pygame.display.set_mode(self.size)
+        pygame.display.set_caption("Clue-Less!")
         
-        locations = []
-        locations.append(LocationIcon(150, 100, "study.jpg"))
-        locations.append(LocationIcon(500, 100, "hall.jpg"))
-        locations.append(LocationIcon(850, 100, "lounge.jpg"))
+        #initialize pygame clock
+        self.clock=pygame.time.Clock()
         
-        locations.append(LocationIcon(150, 300, "library.jpg"))
-        locations.append(LocationIcon(500, 300, "billiard.jpg"))
-        locations.append(LocationIcon(850, 300, "dining.jpg"))
+        #clear the screen
+        self.screen.fill(0)
         
-        locations.append(LocationIcon(150, 500, "conservatory.jpg"))
-        locations.append(LocationIcon(500, 500, "ballroom.jpg"))
-        locations.append(LocationIcon(850, 500, "kitchen.jpg"))
-                
+        self.locations = []
+        self.locations.append(LocationIcon(500, 100, "study.jpg"))
+        self.locations.append(LocationIcon(700, 100, "hall.jpg"))
+        self.locations.append(LocationIcon(900, 100, "lounge.jpg"))
         
-        while 1:
-                
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: sys.exit()
-            
-                screen.fill([0, 0, 0])
-                for l in locations:
-                    screen.blit(l.image, l.rect)
-                pygame.display.flip()
+        self.locations.append(LocationIcon(500, 300, "library.jpg"))
+        self.locations.append(LocationIcon(700, 300, "billiard.jpg"))
+        self.locations.append(LocationIcon(900, 300, "dining.jpg"))
+        
+        self.locations.append(LocationIcon(500, 500, "conservatory.jpg"))
+        self.locations.append(LocationIcon(700, 500, "ballroom.jpg"))
+        self.locations.append(LocationIcon(900, 500, "kitchen.jpg"))
+        
+        #Hallways
+        self.locations.append(LocationIcon(600, 100, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(800, 100, "hallway_horiz.jpg"))
+        
+        self.locations.append(LocationIcon(500, 200, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(700, 200, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(900, 200, "hallway_vert.jpg"))
+        
+        self.locations.append(LocationIcon(600, 300, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(800, 300, "hallway_horiz.jpg"))
+        
+        self.locations.append(LocationIcon(500, 400, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(700, 400, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(900, 400, "hallway_vert.jpg"))
+        
+        self.locations.append(LocationIcon(600, 500, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(800, 500, "hallway_horiz.jpg"))
+        
+        
 
+    def update(self):
+        #sleep to make the game 60 fps
+        self.clock.tick(60)
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+        
+            self.screen.fill([0, 0, 0])
+
+        for l in self.locations:
+            self.screen.blit(l.image, l.rect)
+            
+        pygame.display.flip()
+                
 class LocationIcon(object):
     """
     Room or hallway icon on the board
@@ -54,6 +92,7 @@ class LocationIcon(object):
     
     def __init__(self, coordX, coordY, iconFile):
         self.image, self.rect = load_image(iconFile, -1)
+        #self.rect.inflate_ip(-100, -100)
         self.rect.center = [coordX, coordY]
         
 def load_image(name, colorkey=None):
@@ -74,6 +113,8 @@ def load_image(name, colorkey=None):
     """
     image = pygame.image.load(fullname)
     image = image.convert()
+    ##How to resize an image?!?
+    image = pygame.transform.scale(image, (100,100))
     return image, image.get_rect()
     
     
