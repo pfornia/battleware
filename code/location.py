@@ -23,7 +23,7 @@ class Location(object):
         self.occupants.append(player)
     
     def rmvOccupant(self, player):
-        #todo: remove occupant.
+        #remove occupant.
         return
 
 class Room(Location):
