@@ -42,14 +42,14 @@ class CardController(object):
         
         
     def createCaseFile(self):
-        #todo: make these random
+        #make these random
         self.caseEnvelope = []
         self.caseEnvelope.append(playerCards[0])
         self.caseEnvelope.append(weaponsCards[0])
         self.caseEnvelope.append(roomCards[0])
         
     def distributeCards(self, players):
-        #todo: distribute the cards randomly:
+        #distribute the cards randomly:
         #for all players???
         #for all remaining cards???
         players[0].addCard(playerCards[1])
