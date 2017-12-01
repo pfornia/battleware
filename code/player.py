@@ -17,7 +17,8 @@ class Player(object):
         return self.curLocation
         
     def move(self, location):
-        #todo: rmv from first location
+        #rmv from first location
+        #location.rmvOccupant.(self)
         
         #update location
         self.curLocation = location
