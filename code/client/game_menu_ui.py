@@ -1,17 +1,14 @@
+from PodSixNet.Connection import ConnectionListener, connection
+from time import sleep
 import os, sys
 import pygame
 from pygame.locals import *
 
-def main():
-    from game_menu_ui import GameMenu
-
-    thisUI = GameMenu()
-
-    while 1:
-        thisUI.update()       
+#def main():
 
 
-class GameMenu(object):
+
+class GameMenu(ConnectionListener):
     """
     GameMenu is the UI for the clue game (client side)
     
@@ -69,9 +66,15 @@ class GameMenu(object):
         self.locations.append(LocationIcon(600, 500, "hallway_horiz.jpg"))
         self.locations.append(LocationIcon(800, 500, "hallway_horiz.jpg"))
         
+        self.Connect(('localhost', 1337))
+        
         
 
     def update(self):
+    
+        connection.Pump()
+        self.Pump()
+        
         #sleep to make the game 60 fps
         self.clock.tick(60)
     
@@ -86,6 +89,7 @@ class GameMenu(object):
                 for l in range(len(self.locations)):
                     if self.locations[l].rect.collidepoint(mouse):
                         print(l)
+                        self.Send({"action": "place", "l":l})
                 
             self.screen.fill([0, 0, 0])
 
@@ -132,4 +136,9 @@ def load_image(name, colorkey=None):
     return image, image.get_rect()
     
     
-main()
+thisUI = GameMenu()
+
+while 1:
+    thisUI.update()       
+
+#main()
