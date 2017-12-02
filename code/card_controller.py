@@ -1,3 +1,5 @@
+from random import shuffle
+
 class Card(object):
     """Card class
 
@@ -43,15 +45,23 @@ class CardController(object):
         
     def createCaseFile(self):
         #make these random
+        shuffle(playerCards)
+        shuffle(weaponCards)
+        shuffle(roomCards)
         self.caseEnvelope = []
         self.caseEnvelope.append(playerCards[0])
         self.caseEnvelope.append(weaponsCards[0])
         self.caseEnvelope.append(roomCards[0])
         
     def distributeCards(self, players):
-        #distribute the cards randomly:
+        #distribute the cards randomly: do we need random in createCaseFile and distributeCards?
+        shuffle(playerCards)
+        shuffle(weaponCards)
+        shuffle(roomCards)
         #for all players???
         #for all remaining cards???
+        #do we need a loop to distribute cards?
+        #cards are combined after every player + casefile has 3
         players[0].addCard(playerCards[1])
         players[0].addCard(weaponsCards[1])
         players[0].addCard(roomCards[1])
