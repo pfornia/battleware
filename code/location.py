@@ -24,7 +24,7 @@ class Location(object):
     
     def rmvOccupant(self, player):
         #remove occupant.
-        #self.occupants.pop(player)
+        #self.occupants.remove(player)
         return
 
 class Room(Location):
