@@ -18,14 +18,13 @@ class Player(object):
         
     def move(self, location):
         #rmv from first location
-        #location.rmvOccupant.remove(player)
+        #location.rmvOccupant.remove(self)
         
         #update location
         self.curLocation = location
         
         #add self to location's occupant list
         location.addOccupant(self)
-        
         
     def addCard(self, card):
         self.myCards.append(card)
