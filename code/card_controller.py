@@ -55,13 +55,10 @@ class CardController(object):
         
     def distributeCards(self, players):
         #distribute the cards randomly: do we need random in createCaseFile and distributeCards?
-        shuffle(playerCards)
-        shuffle(weaponCards)
-        shuffle(roomCards)
         #for all players???
         #for all remaining cards???
         #do we need a loop to distribute cards?
-        #cards are combined after every player + casefile has 3
+        #cards are combined after createCaseFile CLUE SETUP 5
         players[0].addCard(playerCards[1])
         players[0].addCard(weaponsCards[1])
         players[0].addCard(roomCards[1])
