@@ -18,7 +18,7 @@ class Player(object):
         
     def move(self, location):
         #rmv from first location
-        #location.rmvOccupant.(self)
+        #location.rmvOccupant.remove(player)
         
         #update location
         self.curLocation = location
