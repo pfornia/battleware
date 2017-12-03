@@ -6,7 +6,12 @@ from pygame.locals import *
 
 #def main():
 
-
+PLAYER_NAMES = ["Miss Scarlet",
+    "Col Mustard",
+    "Mrs White",
+    "Mr Green",
+    "Mrs Peacock",
+    "Prof Plum"]
 
 class GameMenu(ConnectionListener):
     '''
@@ -25,9 +30,13 @@ class GameMenu(ConnectionListener):
     
     def __init__(self):
         pygame.init()
+        pygame.font.init()
         self.size = width, height = 1000, 600
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Clue-Less!")
+        
+        self.titleMessage = "Waiting for more players..."
+        self.serverMessage = ""
         
         #initialize pygame clock
         self.clock=pygame.time.Clock()
@@ -108,8 +117,6 @@ class GameMenu(ConnectionListener):
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
                 
-                print("Clickity-click!")
-                
                 mouse = pygame.mouse.get_pos()
                 for l in range(len(self.locations)):
                     if self.locations[l].rect.collidepoint(mouse):
@@ -125,20 +132,31 @@ class GameMenu(ConnectionListener):
 
         for p in self.playerIcons:
             self.screen.blit(p.image, p.rect)            
-            
-        #if pygame.mouse.get_pressed()[0]:
-        #    print("hello!")
-            
+
+
+        # Title message
+        #create font
+        myfont1 = pygame.font.SysFont(None, 32)
+        myfont2 = pygame.font.SysFont(None, 24)
+
+        #create text surface
+        labelTitle = myfont1.render(self.titleMessage, 1, (255,255,255))
+        labelServer = myfont2.render(self.serverMessage, 1, (255,255,255))
+
+        #draw surface
+        self.screen.blit(labelTitle, (10, 20))
+        self.screen.blit(labelServer, (50, 70))
+
+        
         pygame.display.flip()
-                
-                
+                    
     def Network_startgame(self, data):
         #self.running=True
         self.myPlayerID=data["player"]
         self.numPlayers=data["numPlayers"]
         #self.gameid=data["gameid"]
         self.gameStarted = True
-        print("let's do this!!")
+        self.titleMessage = "Welcome " + PLAYER_NAMES[self.myPlayerID] + "!"
         print(self.myPlayerID)
 
     def Network_updatePositions(self, data):
@@ -154,6 +172,11 @@ class GameMenu(ConnectionListener):
         if self.numPlayers > 3:
             self.playerIcons[3].rect.bottomright = self.locations[data['3']].rect.bottomright
                     
+                    
+    def Network_message(self, data):
+        self.serverMessage = data['message']
+    
+    
 class LocationIcon(object):
     '''
     Room or hallway icon on the board

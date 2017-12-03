@@ -8,12 +8,6 @@ TOTAL_PLAYERS = 2
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
         print(data)
-
-    def Network_doThing(self, data):
-        #self.running=True
-        #self.num=data["player"]
-        #self.gameid=data["gameid"]
-        self._server.doThing()
         
     def Network_move(self, data):
         player = self._server.players[data["client"]]
@@ -54,20 +48,29 @@ class GameMenuServer(PodSixNet.Server.Server):
                     self.playerChannels[p].Send({"action": "startgame",
                             "player":p, 
                             "name":self.players[p].name,
-                            "numPlayers": TOTAL_PLAYERS})      
+                            "numPlayers": TOTAL_PLAYERS})  
+                    self.sendMessage("All player's have arrived. Let's begin!", p)
                 self.numPlayers+=1   
                 self.sendPositions()
        
     #tell all clients all board positions
     def sendPositions(self):
-        message = {"action": "updatePositions"}
-        #add players' positions to the message
+        transmission = {"action": "updatePositions"}
+        #add players' positions to the transmission
         for p in range(len(self.players)):
-            message[str(p)] = self.game.locations.index(self.players[p].curLocation)
+            transmission[str(p)] = self.game.locations.index(self.players[p].curLocation)
             
-        #send entire message to each player
+        transmission['turn'] = self.game.whosTurn
+            
+        #send entire transmission to each player
         for pc in self.playerChannels:
-            pc.Send(message)
+            pc.Send(transmission)
+    
+    #Send generic message to a player's HUD
+    def sendMessage(self, message, playerID):
+        transmission = {"action": "message", "message": message}
+        self.playerChannels[playerID].Send(transmission)
+        
     
 print("STARTING SERVER ON LOCALHOST")
 
