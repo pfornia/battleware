@@ -132,7 +132,8 @@ class Game(object):
         self.cardController.distributeCards()
         
         
-    def makeMove(self, player, location):
+    def makeMove(self, player, locID):
+        location = self.locations[locID]
         if self.isMoveLegal(player, location):
             #make the move
             player.move(location)

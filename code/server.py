@@ -14,6 +14,13 @@ class ClientChannel(PodSixNet.Channel.Channel):
         #self.num=data["player"]
         #self.gameid=data["gameid"]
         self._server.doThing()
+        
+    def Network_move(self, data):
+        player = self._server.players[data["client"]]
+        self._server.game.makeMove(player, data["l"])
+        #send updated positions
+        self._server.sendPositions()
+        
      
     #This will run when a client closes their window.
     #def Close(self):
@@ -62,9 +69,6 @@ class GameMenuServer(PodSixNet.Server.Server):
         for pc in self.playerChannels:
             pc.Send(message)
     
-    def doThing(self):
-        print("do a thing.")
-        
 print("STARTING SERVER ON LOCALHOST")
 
 gameServe=GameMenuServer(localaddr=('localhost', 1337))

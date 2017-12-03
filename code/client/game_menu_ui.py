@@ -114,8 +114,9 @@ class GameMenu(ConnectionListener):
                 for l in range(len(self.locations)):
                     if self.locations[l].rect.collidepoint(mouse):
                         print(l)
-                        self.Send({"action": "place", "l":l})
-                        self.Send({"action": "doThing", "message": "I did a thing!"})
+                        self.Send({"action": "move", 
+                            "client": self.myPlayerID,
+                            "l":l})
                 
             self.screen.fill([0, 0, 0])
 

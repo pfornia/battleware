@@ -24,5 +24,5 @@ print(me3.name)
 
 
 print(me3.getLocation().name)
-thisGame.makeMove(me3, thisGame.locations[0])
+thisGame.makeMove(me3, 0)
 print(me3.getLocation().name)
