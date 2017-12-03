@@ -67,7 +67,11 @@ class GameMenu(ConnectionListener):
         self.locations.append(LocationIcon(800, 500, "hallway_horiz.jpg"))
         
         self.playerIcons = []
-        self.playerIcons.append(PlayerIcon)
+        self.playerIcons.append(PlayerIcon("scarlet.jpg"))
+        self.playerIcons.append(PlayerIcon("mustard.jpg"))
+        self.playerIcons.append(PlayerIcon("white.jpg"))
+        self.playerIcons.append(PlayerIcon("green.jpg"))
+        
         
         self.gameStarted = False
         
@@ -117,7 +121,9 @@ class GameMenu(ConnectionListener):
 
         for l in self.locations:
             self.screen.blit(l.image, l.rect)
-            
+
+        for p in self.playerIcons:
+            self.screen.blit(p.image, p.rect)            
             
         #if pygame.mouse.get_pressed()[0]:
         #    print("hello!")
@@ -138,8 +144,15 @@ class GameMenu(ConnectionListener):
         #self.running=True
         print("updating positions...")
         print(data)
-
-        
+        #by putting icons on different portions of the square, they won't overlap.
+        self.playerIcons[0].rect.topleft = self.locations[data['0']].rect.topleft
+        if self.numPlayers > 1:
+            self.playerIcons[1].rect.topright = self.locations[data['1']].rect.topright
+        if self.numPlayers > 2:
+            self.playerIcons[2].rect.bottomleft = self.locations[data['2']].rect.bottomleft
+        if self.numPlayers > 3:
+            self.playerIcons[3].rect.bottomright = self.locations[data['3']].rect.bottomright
+                    
 class LocationIcon(object):
     '''
     Room or hallway icon on the board
@@ -156,14 +169,13 @@ class PlayerIcon(object):
     Player Icon on the board
     '''
     
-    def __init__(self, coordX, coordY, iconFile):
+    def __init__(self, iconFile):
         self.name = iconFile
-        self.image, self.rect = load_image(iconFile, -1)
-        #self.rect.inflate_ip(-100, -100)
-        self.rect.center = [coordX, coordY]
-    
+        self.image, self.rect = load_image(iconFile, -1, location = False)    
+        #hide unused players off screen
+        self.rect.center = [-100, 0]
         
-def load_image(name, colorkey=None):
+def load_image(name, colorkey=None, location = True):
     fullname = os.path.join('icons/', name)
     #weird python 2 syntax?? Doesn't work.
     '''
@@ -182,7 +194,10 @@ def load_image(name, colorkey=None):
     image = pygame.image.load(fullname)
     image = image.convert()
     ##How to resize an image?!?
-    image = pygame.transform.scale(image, (100,100))
+    if location:
+        image = pygame.transform.scale(image, (100,100))
+    else:
+        image = pygame.transform.scale(image, (30,50))
     return image, image.get_rect()
         
 thisUI = GameMenu()
