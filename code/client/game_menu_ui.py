@@ -9,7 +9,7 @@ from pygame.locals import *
 
 
 class GameMenu(ConnectionListener):
-    """
+    '''
     GameMenu is the UI for the clue game (client side)
     
     Many code snippets taken from 
@@ -21,7 +21,7 @@ class GameMenu(ConnectionListener):
         and
         https://www.raywenderlich.com/46843/multiplayer-game-programming-for-teens-with-python-part-2
     
-    """
+    '''
     
     def __init__(self):
         pygame.init()
@@ -66,10 +66,31 @@ class GameMenu(ConnectionListener):
         self.locations.append(LocationIcon(600, 500, "hallway_horiz.jpg"))
         self.locations.append(LocationIcon(800, 500, "hallway_horiz.jpg"))
         
+        self.playerIcons = []
+        self.playerIcons.append(PlayerIcon)
+        
+        self.gameStarted = False
+        
+        self.numPlayers = 0
+        
         self.Connect(('localhost', 1337))
         
-        
-
+        '''
+        self.running=False
+        while not self.running:
+            self.Pump()
+            connection.Pump()
+            sleep(0.01)
+        #determine attributes from player #
+        if self.num==0:
+            self.turn=True
+            self.marker = self.greenplayer
+            self.othermarker = self.blueplayer
+        else:
+            self.turn=False
+            self.marker=self.blueplayer
+            self.othermarker = self.greenplayer
+        '''
     def update(self):
     
         connection.Pump()
@@ -90,6 +111,7 @@ class GameMenu(ConnectionListener):
                     if self.locations[l].rect.collidepoint(mouse):
                         print(l)
                         self.Send({"action": "place", "l":l})
+                        self.Send({"action": "doThing", "message": "I did a thing!"})
                 
             self.screen.fill([0, 0, 0])
 
@@ -102,10 +124,26 @@ class GameMenu(ConnectionListener):
             
         pygame.display.flip()
                 
+                
+    def Network_startgame(self, data):
+        #self.running=True
+        self.myPlayerID=data["player"]
+        self.numPlayers=data["numPlayers"]
+        #self.gameid=data["gameid"]
+        self.gameStarted = True
+        print("let's do this!!")
+        print(self.myPlayerID)
+
+    def Network_updatePositions(self, data):
+        #self.running=True
+        print("updating positions...")
+        print(data)
+
+        
 class LocationIcon(object):
-    """
+    '''
     Room or hallway icon on the board
-    """
+    '''
     
     def __init__(self, coordX, coordY, iconFile):
         self.name = iconFile
@@ -113,10 +151,22 @@ class LocationIcon(object):
         #self.rect.inflate_ip(-100, -100)
         self.rect.center = [coordX, coordY]
         
+class PlayerIcon(object):
+    '''
+    Player Icon on the board
+    '''
+    
+    def __init__(self, coordX, coordY, iconFile):
+        self.name = iconFile
+        self.image, self.rect = load_image(iconFile, -1)
+        #self.rect.inflate_ip(-100, -100)
+        self.rect.center = [coordX, coordY]
+    
+        
 def load_image(name, colorkey=None):
     fullname = os.path.join('icons/', name)
     #weird python 2 syntax?? Doesn't work.
-    """
+    '''
     try:
         image = pygame.image.load(fullname)
     except pygame.error, message:
@@ -128,14 +178,13 @@ def load_image(name, colorkey=None):
             colorkey = image.get_at((0,0))
         image.set_colorkey(colorkey, RLEACCEL)
     return image, image.get_rect()
-    """
+    '''
     image = pygame.image.load(fullname)
     image = image.convert()
     ##How to resize an image?!?
     image = pygame.transform.scale(image, (100,100))
     return image, image.get_rect()
-    
-    
+        
 thisUI = GameMenu()
 
 while 1:

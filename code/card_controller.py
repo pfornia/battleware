@@ -1,26 +1,26 @@
 from random import shuffle
 
 class Card(object):
-    """Card class
+    '''Card class
 
     Attributes:
         cardType: 
     
-    """
+    '''
     def __init__(self, subject, thisType):
         self.cardType = thisType
         self.subject = subject
         print("created a new card.")
 
 class CardController(object):
-    """The card handler for a game instance
+    '''The card handler for a game instance
 
     Attributes:
 
-    """
+    '''
 
     def __init__(self, players, locations, weapons):
-        """Return an initialized Game object"""
+        '''Return an initialized Game object'''
         #player cards do not exist until players join
         self.playerCards = []
         for p in players:

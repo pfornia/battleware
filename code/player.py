@@ -1,12 +1,12 @@
 class Player(object):
-    """A player
+    '''A player
 
     Attributes:
 
-    """
+    '''
 
     def __init__(self, name, location):
-        """Return an initialized Player object"""
+        '''Return an initialized Player object'''
         self.name = name
         self.myCards = []
         self.curLocation = location #how to initialize?

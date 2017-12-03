@@ -22,17 +22,17 @@ WEAPONS = ["Rope",
     "Revolver"]
 
 class Game(object):
-    """An instance of a single game of "Clue-less"
+    '''An instance of a single game of "Clue-less"
 
     Attributes:
         player: A list of players
         locations: A set of locations
         whosTurn: The index of the player whos 
         cardController: CardController object for this game.
-    """
+    '''
     
     def __init__(self):
-        """Return an initialized Game object"""
+        '''Return an initialized Game object'''
         
         #Initialize empty players list
         self.players = []
@@ -61,13 +61,13 @@ class Game(object):
         for i in range(0, 12):
             self.locations.append(Hallway("H" + str(i)))   
          
-        """        
+        '''        
         0   9   1   10  2
         11      12      13
         3   14  4   15  5
         16      17      18
         6   19  7   20  8         
-        """
+        '''
         
         #Study:
         self.locations[0].addAdjLocation(self.locations[9])
@@ -106,9 +106,9 @@ class Game(object):
         self.locations[8].addAdjLocation(self.locations[20])       
     
     def addPlayer(self):
-        """Adds player to game, by initializing
+        '''Adds player to game, by initializing
         player object into the player list and 
-        returning the index of the new player"""
+        returning the index of the new player'''
         
         numPlayers = len(self.players)
         
@@ -120,7 +120,7 @@ class Game(object):
         return newPlayer
         
     def notify(self, amount):
-        """Does this return information up??"""
+        '''Does this return information up??'''
         #???
         
     def initializeGame(self):

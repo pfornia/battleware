@@ -1,12 +1,12 @@
 class Location(object):
-    """A location
+    '''A location
 
     Attributes:
 
-    """
+    '''
 
     def __init__(self, name):
-        """Return an initialized Location object"""
+        '''Return an initialized Location object'''
         self.name = name
         #initialize empty set of occupants
         self.occupants = []
@@ -15,7 +15,7 @@ class Location(object):
         print("location initialized")
         
     def addAdjLocation(self, location):
-        """ add adjacency (in both directions)"""
+        ''' add adjacency (in both directions)'''
         self.adjLocations.append(location)
         location.adjLocations.append(self)
     
@@ -28,10 +28,10 @@ class Location(object):
         return
 
 class Room(Location):
-    """A Room (type of Location)"""
+    '''A Room (type of Location)'''
 
     def __init__(self, name):
-        """Return an initialized Room object"""
+        '''Return an initialized Room object'''
         self.name = name
         #initialize empty set of occupants
         self.occupants = []
@@ -43,10 +43,10 @@ class Room(Location):
     
     
 class Hallway(Location):
-    """A Hallway (type of Location)"""
+    '''A Hallway (type of Location)'''
 
     def __init__(self, name):
-        """Return an initialized hallway object"""
+        '''Return an initialized hallway object'''
         self.name = name
         #initialize empty set of occupants
         self.occupants = []
