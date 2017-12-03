@@ -1,5 +1,4 @@
-# May not need this file eventually.
-#  but useful for testing.
+#To test adding players and 
 
 #assume exactly 2 players.
 
