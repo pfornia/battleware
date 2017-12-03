@@ -1,9 +1,5 @@
 #To test adding players and 
 
-import PodSixNet.Channel
-import PodSixNet.Server
-#from client.server import *
-#import client.game_menu_ui
 from game import Game
 from card_controller import CardController
 from card_controller import Card
@@ -13,7 +9,7 @@ from player import Player
 import compileall
 import threading
 import time
-from subprocess import check_output, call
+from subprocess import check_output, call, Popen
 
 serverFileName = "client/server.py"
 clientFileName = "client/game_menu_ui.py"
@@ -24,12 +20,13 @@ testPlayers.append("Alice")
 testPlayers.append("Peter")
 testPlayers.append("Hercules")
 testPlayersCount = len(testPlayers)
-myPyFile = "client/server.py"
 
 def startServer():
     print(threading.currentThread().getName(), 'Started')
-    compiled = compile('',serverFileName, 'exec')
-    exec(compiled)
+    #compiled = compile('',serverFileName, 'exec')
+    #exec(compiled)
+    
+    call(["python3.4",serverFileName])
     time.sleep(10)
     #exec(open(myPyFile).read())
     #exec(open("./client/server.py").read())
@@ -39,8 +36,7 @@ def startServer():
           
 def startBoardGame():
     print(threading.currentThread().getName(), 'joined the game')
-    compiled = compile('',clientFileName, 'exec')
-    exec(compiled)
+    call(["python3.4",clientFileName])
     time.sleep(2)
     print(threading.currentThread().getName(), 'left the game')
 
