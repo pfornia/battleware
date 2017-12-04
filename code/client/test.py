@@ -13,14 +13,14 @@ import threading
 import time
 from subprocess import check_output, call, Popen
 
-serverFileName = "server.py"
+serverFileName = "../server.py"
 clientFileName = "game_menu_ui.py"
 testPlayers=[]
 
 testPlayers.append("Michael")
 testPlayers.append("Alice")
-testPlayers.append("Peter")
-testPlayers.append("Hercules")
+#testPlayers.append("Peter")
+#testPlayers.append("Hercules")
 testPlayersCount = len(testPlayers)
 
 def startServer():
