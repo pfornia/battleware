@@ -3,7 +3,7 @@ import PodSixNet.Server
 from time import sleep
 from game import Game
 
-TOTAL_PLAYERS = 2
+TOTAL_PLAYERS = 1
 
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
@@ -50,6 +50,7 @@ class GameMenuServer(PodSixNet.Server.Server):
                             "name":self.players[p].name,
                             "numPlayers": TOTAL_PLAYERS})  
                     self.sendMessage("All player's have arrived. Let's begin!", p)
+                    self.sendOptions(["give up", "fight!"], p)
                 self.numPlayers+=1   
                 self.sendPositions()
        
@@ -70,7 +71,13 @@ class GameMenuServer(PodSixNet.Server.Server):
     def sendMessage(self, message, playerID):
         transmission = {"action": "message", "message": message}
         self.playerChannels[playerID].Send(transmission)
-        
+
+    #Send generic options to a player's HUD
+    def sendOptions(self, options, playerID):
+        transmission = {"action": "options", "numOptions": len(options)}
+        for o in range(len(options)):
+            transmission[str(o)] = options[o]
+        self.playerChannels[playerID].Send(transmission)        
     
 print("STARTING SERVER ON LOCALHOST")
 

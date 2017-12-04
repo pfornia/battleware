@@ -37,6 +37,7 @@ class GameMenu(ConnectionListener):
         
         self.titleMessage = "Waiting for more players..."
         self.serverMessage = ""
+        self.serverOptions = []
         
         #initialize pygame clock
         self.clock=pygame.time.Clock()
@@ -131,13 +132,14 @@ class GameMenu(ConnectionListener):
             self.screen.blit(l.image, l.rect)
 
         for p in self.playerIcons:
-            self.screen.blit(p.image, p.rect)            
+            self.screen.blit(p.image, p.rect)          
 
 
         # Title message
         #create font
         myfont1 = pygame.font.SysFont(None, 32)
         myfont2 = pygame.font.SysFont(None, 24)
+        
 
         #create text surface
         labelTitle = myfont1.render(self.titleMessage, 1, (255,255,255))
@@ -146,7 +148,13 @@ class GameMenu(ConnectionListener):
         #draw surface
         self.screen.blit(labelTitle, (10, 20))
         self.screen.blit(labelServer, (50, 70))
-
+        
+        curY = 120
+        
+        for o in range(len(self.serverOptions)):
+            labelOption = myfont2.render(str(o+1) + ")  " + self.serverOptions[o], 1, (255,255,255))
+            self.screen.blit(labelOption, (50, curY))
+            curY += 30
         
         pygame.display.flip()
                     
@@ -176,6 +184,13 @@ class GameMenu(ConnectionListener):
     def Network_message(self, data):
         self.serverMessage = data['message']
     
+    def Network_options(self, data):
+        
+        #reset options to blank
+        self.serverOptions = []
+        
+        for o in range(data['numOptions']):
+            self.serverOptions.append(data[str(o)])
     
 class LocationIcon(object):
     '''
