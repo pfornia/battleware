@@ -1,4 +1,6 @@
 #To test adding players and 
+import sys
+sys.path.append("..")
 
 from game import Game
 from card_controller import CardController
@@ -12,7 +14,7 @@ import time
 from subprocess import check_output, call, Popen
 
 serverFileName = "server.py"
-clientFileName = "client/game_menu_ui.py"
+clientFileName = "game_menu_ui.py"
 testPlayers=[]
 
 testPlayers.append("Michael")
