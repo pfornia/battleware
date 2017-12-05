@@ -12,17 +12,17 @@ thisGame = Game()
         
 me1 = thisGame.addPlayer()
 
-print(me1.name)
+print(me1)
 
 me2 = thisGame.addPlayer()
 
-print(me2.name)
+print(me2)
 
 me3 = thisGame.addPlayer()
 
-print(me3.name)
+print(me3)
 
 
-print(me3.getLocation().name)
+#print(me3.getLocation().name)
 thisGame.makeMove(me3, 0)
-print(me3.getLocation().name)
+#print(me3.getLocation().name)

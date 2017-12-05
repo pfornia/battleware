@@ -117,7 +117,7 @@ class Game(object):
             
         self.players.append(newPlayer)
         
-        return newPlayer
+        return numPlayers
         
     def notify(self, amount):
         '''Does this return information up??'''
@@ -132,23 +132,24 @@ class Game(object):
         self.cardController.distributeCards()
         
         
-    def makeMove(self, player, locID):
+    def makeMove(self, playerID, locID):
         location = self.locations[locID]
+        player = self.players[playerID]
         if self.isMoveLegal(player, location):
             #make the move
             player.move(location)
             return True
         return False
         
-    def isMoveLegal(self, player, location):
+    def isMoveLegal(self, playerID, locID):
         #todo: this.
         return True
         
-    def makeSuggestion(self, suggester, suspect, room, weaponNum):
+    def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
         return
         
-    def makeAccusation(self, accuser, suspect, room, weaponNum):
+    def makeAccusation(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
         return
         
@@ -158,3 +159,6 @@ class Game(object):
             whosTurn = 0
         else:
             whosTurn += 1
+            
+    def getPlayerLocID(self, playerID):
+        return self.locations.index(self.players[playerID].curLocation)

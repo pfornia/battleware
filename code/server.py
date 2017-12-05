@@ -47,7 +47,6 @@ class GameMenuServer(PodSixNet.Server.Server):
                 for p in range(len(self.playerChannels)):
                     self.playerChannels[p].Send({"action": "startgame",
                             "player":p, 
-                            "name":self.players[p].name,
                             "numPlayers": TOTAL_PLAYERS})  
                     self.sendMessage("All player's have arrived. Let's begin!", p)
                     self.sendOptions(["give up", "fight!"], p)
@@ -59,7 +58,7 @@ class GameMenuServer(PodSixNet.Server.Server):
         transmission = {"action": "updatePositions"}
         #add players' positions to the transmission
         for p in range(len(self.players)):
-            transmission[str(p)] = self.game.locations.index(self.players[p].curLocation)
+            transmission[str(p)] = self.game.getPlayerLocID(p)
             
         transmission['turn'] = self.game.whosTurn
             
