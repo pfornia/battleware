@@ -38,6 +38,7 @@ class GameMenu(ConnectionListener):
         self.titleMessage = "Waiting for more players..."
         self.serverMessage = ""
         self.serverOptions = []
+        self.serverOptionsButtons = []
         
         #initialize pygame clock
         self.clock=pygame.time.Clock()
@@ -125,6 +126,13 @@ class GameMenu(ConnectionListener):
                         self.Send({"action": "move", 
                             "client": self.myPlayerID,
                             "l":l})
+                            
+                for b in range(len(self.serverOptionsButtons)):
+                    if self.serverOptionsButtons[b].rect.collidepoint(mouse):
+                        print(b)
+                        self.Send({"action": "selectOption", 
+                            "client": self.myPlayerID,
+                            "o":b})                    
                 
             self.screen.fill([0, 0, 0])
 
@@ -150,8 +158,12 @@ class GameMenu(ConnectionListener):
         self.screen.blit(labelServer, (50, 70))
         
         curY = 120
+        curX = 50
         
         for o in range(len(self.serverOptions)):
+            button = self.serverOptionsButtons[o]
+            button.rect.topleft = [curX - 3, curY - 3]
+            self.screen.blit(button.image, button.rect)
             labelOption = myfont2.render(str(o+1) + ")  " + self.serverOptions[o], 1, (255,255,255))
             self.screen.blit(labelOption, (50, curY))
             curY += 30
@@ -188,9 +200,12 @@ class GameMenu(ConnectionListener):
         
         #reset options to blank
         self.serverOptions = []
+        self.serverOptionsButtons = []
         
         for o in range(data['numOptions']):
             self.serverOptions.append(data[str(o)])
+            self.serverOptionsButtons.append(ButtonIcon("button.jpg"))
+            
     
 class LocationIcon(object):
     '''
@@ -210,11 +225,22 @@ class PlayerIcon(object):
     
     def __init__(self, iconFile):
         self.name = iconFile
-        self.image, self.rect = load_image(iconFile, -1, location = False)    
+        self.image, self.rect = load_image(iconFile, -1, xDim = 30, yDim = 50)    
+        #hide unused players off screen
+        self.rect.center = [-100, 0]
+
+class ButtonIcon(object):
+    '''
+    Button Icon on the board
+    '''
+    
+    def __init__(self, iconFile):
+        self.name = iconFile
+        self.image, self.rect = load_image(iconFile, -1, xDim = 350, yDim = 24)    
         #hide unused players off screen
         self.rect.center = [-100, 0]
         
-def load_image(name, colorkey=None, location = True):
+def load_image(name, colorkey=None, xDim = 100, yDim = 100):
     fullname = os.path.join('icons/', name)
     #weird python 2 syntax?? Doesn't work.
     '''
@@ -233,10 +259,8 @@ def load_image(name, colorkey=None, location = True):
     image = pygame.image.load(fullname)
     image = image.convert()
     ##How to resize an image?!?
-    if location:
-        image = pygame.transform.scale(image, (100,100))
-    else:
-        image = pygame.transform.scale(image, (30,50))
+    image = pygame.transform.scale(image, (xDim,yDim))
+    #image = pygame.transform.scale(image, (30,50))
     return image, image.get_rect()
         
 thisUI = GameMenu()
