@@ -4,17 +4,26 @@ from time import sleep
 from game import Game
 
 TOTAL_PLAYERS = 2
-
+    
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
         print(data)
         
     def Network_move(self, data):
         legal = self._server.game.makeMove(data["client"], data["l"])
-        if legal == False:
-            self._server.sendMessage("Not your turn!!", data["client"])
-        #send updated positions
-        self._server.sendPositions()
+        if legal == 0:
+            self._server.sendTurns()
+            self._server.sendPositions()
+        elif legal == 1:
+            self._server.sendMessage("Not your turn.", data["client"])
+        elif legal == 2:
+            self._server.sendMessage("That room is too far away.", data["client"])
+        elif legal == 3:
+            self._server.sendMessage("Can't stay here.", data["client"])
+        elif legal == 4:
+            self._server.sendMessage("Hallway blocked.", data["client"])
+        
+        
         
      
     #This will run when a client closes their window.
@@ -71,6 +80,15 @@ class GameMenuServer(PodSixNet.Server.Server):
     def sendMessage(self, message, playerID):
         transmission = {"action": "message", "message": message}
         self.playerChannels[playerID].Send(transmission)
+        
+    def sendTurns(self):
+        for p in range(len(self.players)):
+            turn = self.game.whoseTurn
+            if turn == p:
+                self.sendMessage("Your Turn!", p)
+            else:
+                message = "Waiting for " + self.game.getPlayerName(turn) + "..."
+                self.sendMessage(message, p)
 
     #Send generic options to a player's HUD
     def sendOptions(self, options, playerID):

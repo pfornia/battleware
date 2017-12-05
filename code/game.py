@@ -135,18 +135,39 @@ class Game(object):
     def makeMove(self, playerID, locID):
         location = self.locations[locID]
         player = self.players[playerID]
-        if self.isMoveLegal(playerID, locID):
+        result = self.isMoveLegal(playerID, locID)
+        if result == 0:
             #make the move
             player.move(location)
             self.incrementTurn()
-            return True
-        return False
+            return result
+        return result
         
     def isMoveLegal(self, playerID, locID):
-        if self.whoseTurn == playerID:
-            return True
-        else:
-            return False
+        #return 
+        #1 if not turn
+        #2 if not adjacent
+        #3 if already in the room
+        #4 if hall is blocked
+        #0 if move is legal
+        
+        if self.whoseTurn != playerID:
+            return 1
+
+        play = self.players[playerID]
+        oldLoc = play.curLocation
+        newLoc = self.locations[locID]
+        
+        if oldLoc.adjLocations.__contains__(newLoc) == False:
+            return 2
+            
+        if oldLoc == newLoc:
+            return 3
+            
+        if newLoc.isRoom == False and len(newLoc.occupants) > 0:
+            return 4
+            
+        return 0
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
@@ -165,3 +186,6 @@ class Game(object):
             
     def getPlayerLocID(self, playerID):
         return self.locations.index(self.players[playerID].curLocation)
+        
+    def getPlayerName(self, playerID):
+        return PLAYER_NAMES[playerID]

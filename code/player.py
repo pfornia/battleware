@@ -10,6 +10,7 @@ class Player(object):
         self.name = name
         self.myCards = []
         self.curLocation = location #how to initialize?
+        location.addOccupant(self)
         
         print("player initialized")
         
@@ -18,13 +19,15 @@ class Player(object):
         
     def move(self, location):
         #rmv from first location
-        #location.rmvOccupant.remove(self)
+        self.curLocation.rmvOccupant(self)
         
         #update location
         self.curLocation = location
         
         #add self to location's occupant list
         location.addOccupant(self)
+        
+        
         
     def addCard(self, card):
         self.myCards.append(card)

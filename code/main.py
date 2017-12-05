@@ -22,25 +22,12 @@ me3 = thisGame.addPlayer()
 
 print(me3)
 
-
-print("whose turn?")
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-thisGame.incrementTurn()
-print(thisGame.whoseTurn)
-
-
+print(thisGame.getPlayerLocID(me1))
+print(thisGame.locations[10].occupants)
 #print(me3.getLocation().name)
-thisGame.makeMove(me3, 0)
+print(thisGame.makeMove(me1, 2))
+
+print(thisGame.getPlayerLocID(me1))
+print(thisGame.locations[10].occupants)
+
 #print(me3.getLocation().name)
