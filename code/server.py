@@ -3,15 +3,16 @@ import PodSixNet.Server
 from time import sleep
 from game import Game
 
-TOTAL_PLAYERS = 1
+TOTAL_PLAYERS = 2
 
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
         print(data)
         
     def Network_move(self, data):
-        player = self._server.players[data["client"]]
-        self._server.game.makeMove(player, data["l"])
+        legal = self._server.game.makeMove(data["client"], data["l"])
+        if legal == False:
+            self._server.sendMessage("Not your turn!!", data["client"])
         #send updated positions
         self._server.sendPositions()
         
@@ -60,7 +61,7 @@ class GameMenuServer(PodSixNet.Server.Server):
         for p in range(len(self.players)):
             transmission[str(p)] = self.game.getPlayerLocID(p)
             
-        transmission['turn'] = self.game.whosTurn
+        transmission['turn'] = self.game.whoseTurn
             
         #send entire transmission to each player
         for pc in self.playerChannels:

@@ -27,7 +27,7 @@ class Game(object):
     Attributes:
         player: A list of players
         locations: A set of locations
-        whosTurn: The index of the player whos 
+        whoseTurn: The index of the player whose turn is now.
         cardController: CardController object for this game.
     '''
     
@@ -38,7 +38,7 @@ class Game(object):
         self.players = []
 
         #start with zero indexed player
-        self.whosTurn = 0
+        self.whoseTurn = 0
         
         self.initializeRooms()
            
@@ -135,15 +135,18 @@ class Game(object):
     def makeMove(self, playerID, locID):
         location = self.locations[locID]
         player = self.players[playerID]
-        if self.isMoveLegal(player, location):
+        if self.isMoveLegal(playerID, locID):
             #make the move
             player.move(location)
+            self.incrementTurn()
             return True
         return False
         
     def isMoveLegal(self, playerID, locID):
-        #todo: this.
-        return True
+        if self.whoseTurn == playerID:
+            return True
+        else:
+            return False
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
@@ -155,10 +158,10 @@ class Game(object):
         
     def incrementTurn(self):
         #If on last player, loop back to first player.
-        if whosTurn >= len(self.players) - 1:
-            whosTurn = 0
+        if self.whoseTurn >= len(self.players) - 1:
+            self.whoseTurn = 0
         else:
-            whosTurn += 1
+            self.whoseTurn += 1
             
     def getPlayerLocID(self, playerID):
         return self.locations.index(self.players[playerID].curLocation)
