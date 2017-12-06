@@ -18,17 +18,19 @@ clientFileName = "game_menu_ui.py"
 testPlayers=[]
 
 testPlayers.append("Michael")
-#testPlayers.append("Alice")
+testPlayers.append("Alice")
 #testPlayers.append("Peter")
 #testPlayers.append("Hercules")
 #testPlayersCount = len(testPlayers)
+threadKiller = False
 
 def startServer():
-    print(threading.currentThread().getName(), ' Started a Server thread.')
-    call(["python3.4",serverFileName])
-    time.sleep(2)
-    print(threading.currentThread().getName(), ' Ended a Server thread.')
-          
+    while not TestServer.shutdown:
+        print(threading.currentThread().getName(), ' Started a Server thread.')
+        call(["python3.4",serverFileName])
+        time.sleep(2)
+        print(threading.currentThread().getName(), ' Ended a Server thread.')
+    
 def startBoardGame():
     print(threading.currentThread().getName(), ' Started a client thread.')
     call(["python3.4",clientFileName])
@@ -50,8 +52,13 @@ for i in testPlayers:
 while threading.active_count() > 1:
     time.sleep(1)
     if threading.active_count() == 2:
-        TestServer._is_stopped.is_set()
-        #TestServer._stop()
+        TestServer._is_stopped.set()
+        threadKiller = True
+        TestServer.shutdown = True
+        print("Server closing..........")
+        TestServer.join()
+
+
 #for i in testPlayers:
 #    i.join()
 #    print(i)
@@ -60,6 +67,4 @@ while threading.active_count() > 1:
     #thread.join()
 #    print(thread.name)    
 
-#TestServer.join()
-        
 print("\nTest End")
