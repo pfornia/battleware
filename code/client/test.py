@@ -25,7 +25,7 @@ testPlayers.append("Alice")
 threadKiller = False
 
 def startServer():
-    while not TestServer.shutdown:
+    #while not TestServer.shutdown:
         print(threading.currentThread().getName(), ' Started a Server thread.')
         call(["python3.4",serverFileName])
         time.sleep(2)
@@ -40,7 +40,9 @@ def startBoardGame():
 TestServer = threading.Thread(name='Server', target=startServer)
 TestServer.setDaemon(True)
 TestServer.start()
-TestServer._is_stopped=threading.Event()
+TestServer._stop = threading.Event()
+TestServer.lock = threading.Lock()
+#TestServer.shut = threading._shutdown()
 time.sleep(1)
 
 for i in testPlayers:
@@ -52,10 +54,13 @@ for i in testPlayers:
 while threading.active_count() > 1:
     time.sleep(1)
     if threading.active_count() == 2:
-        TestServer._is_stopped.set()
-        threadKiller = True
-        TestServer.shutdown = True
+        TestServer._stop.set()
+        #TestServer.shutdown = True
+        TestServer._stop = True
         print("Server closing..........")
+        #TestServer._tstate_lock = None
+        #TestServer._wait_for_tstate_lock()
+        TestServer.Lock = None
         TestServer.join()
 
 
