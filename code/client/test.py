@@ -1,4 +1,6 @@
 #To test adding players and 
+import sys
+sys.path.append("..")
 
 from game import Game
 from card_controller import CardController
@@ -11,15 +13,15 @@ import threading
 import time
 from subprocess import check_output, call, Popen
 
-serverFileName = "client/server.py"
-clientFileName = "client/game_menu_ui.py"
+serverFileName = "../server.py"
+clientFileName = "game_menu_ui.py"
 testPlayers=[]
 
 testPlayers.append("Michael")
-testPlayers.append("Alice")
-testPlayers.append("Peter")
-testPlayers.append("Hercules")
-testPlayersCount = len(testPlayers)
+#testPlayers.append("Alice")
+#testPlayers.append("Peter")
+#testPlayers.append("Hercules")
+#testPlayersCount = len(testPlayers)
 
 def startServer():
     print(threading.currentThread().getName(), ' Started a Server thread.')
@@ -36,6 +38,7 @@ def startBoardGame():
 TestServer = threading.Thread(name='Server', target=startServer)
 TestServer.setDaemon(True)
 TestServer.start()
+TestServer._is_stopped=threading.Event()
 time.sleep(1)
 
 for i in testPlayers:
@@ -46,8 +49,9 @@ for i in testPlayers:
 
 while threading.active_count() > 1:
     time.sleep(1)
-    if threading.active_count() = 2:
-        TestServer._stop()
+    if threading.active_count() == 2:
+        TestServer._is_stopped.is_set()
+        #TestServer._stop()
 #for i in testPlayers:
 #    i.join()
 #    print(i)
