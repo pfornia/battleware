@@ -1,6 +1,4 @@
 #To test adding players and 
-import sys
-sys.path.append("..")
 
 from game import Game
 from card_controller import CardController
@@ -13,36 +11,29 @@ import threading
 import time
 from subprocess import check_output, call, Popen
 
-serverFileName = "../server.py"
-clientFileName = "game_menu_ui.py"
+serverFileName = "client/server.py"
+clientFileName = "client/game_menu_ui.py"
 testPlayers=[]
 
 testPlayers.append("Michael")
 testPlayers.append("Alice")
-#testPlayers.append("Peter")
-#testPlayers.append("Hercules")
+testPlayers.append("Peter")
+testPlayers.append("Hercules")
 testPlayersCount = len(testPlayers)
 
 def startServer():
-    print(threading.currentThread().getName(), 'Executing Server')
-    #compiled = compile('',serverFileName, 'exec')
-    #exec(compiled)
-    
+    print(threading.currentThread().getName(), ' Started a Server thread.')
     call(["python3.4",serverFileName])
     time.sleep(2)
-    #exec(open(myPyFile).read())
-    #exec(open("./client/server.py").read())
-    #call('python3.4 /server.py')
-    print(threading.currentThread().getName(), 'Closing Server')
-    
+    print(threading.currentThread().getName(), ' Ended a Server thread.')
           
 def startBoardGame():
-    print(threading.currentThread().getName(), 'Executing a client session')
+    print(threading.currentThread().getName(), ' Started a client thread.')
     call(["python3.4",clientFileName])
     time.sleep(2)
-    print(threading.currentThread().getName(), 'Closed a client session')
+    print(threading.currentThread().getName(), ' Ended a client thread.')
 
-TestServer = threading.Thread(name='', target=startServer)
+TestServer = threading.Thread(name='Server', target=startServer)
 TestServer.setDaemon(True)
 TestServer.start()
 time.sleep(1)
@@ -50,16 +41,20 @@ time.sleep(1)
 for i in testPlayers:
     i = threading.Thread(name=i, target=startBoardGame)
     i.setDaemon(True)
+    time.sleep(2)
     i.start()
 
+while threading.active_count() > 1:
+    time.sleep(1)
+    if threading.active_count() = 2:
+        TestServer._stop()
 #for i in testPlayers:
 #    i.join()
 #    print(i)
-i.join()    
+    
 #for thread in threading.enumerate():
     #thread.join()
-    #print(thread.name)    
-time.sleep(5)
+#    print(thread.name)    
 
 #TestServer.join()
         
