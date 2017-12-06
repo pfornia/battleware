@@ -10,10 +10,21 @@ class ClientChannel(PodSixNet.Channel.Channel):
         print(data)
         
     def Network_move(self, data):
+        #What is status of attempted move?
         legal = self._server.game.makeMove(data["client"], data["l"])
         if legal == 0:
-            self._server.sendTurns()
             self._server.sendPositions()
+            #if they have moved, but turn is not yet over
+            if self._server.game.hasMoved:
+                self._server.optionSet = "room"
+                self._server.sendOptions([
+                        "Make Suggestion",
+                        "Make Accusation",
+                        "End turn"],
+                    data["client"])
+            else: 
+                self._server.sendTurns()
+     
         elif legal == 1:
             self._server.sendMessage("Not your turn.", data["client"])
         elif legal == 2:
@@ -21,14 +32,19 @@ class ClientChannel(PodSixNet.Channel.Channel):
         elif legal == 3:
             self._server.sendMessage("Can't stay here.", data["client"])
         elif legal == 4:
-            self._server.sendMessage("Hallway blocked.", data["client"])
-        
-        
-        
-     
+            self._server.sendMessage("Hallway blocked.", data["client"]) 
+        elif legal == 5:
+            self._server.sendMessage("You've already moved.", data["client"])            
+            
+            
+    def Network_selectOption(self, data):
+        self._server.selectOption(data["o"], data["client"])
+            
     #This will run when a client closes their window.
     #def Close(self):
     #    self._server.close(self.gameid)
+    
+    
         
 class GameMenuServer(PodSixNet.Server.Server):
     
@@ -39,6 +55,7 @@ class GameMenuServer(PodSixNet.Server.Server):
         self.numPlayers=0
         self.playerChannels = [] #list of channels
         self.players = [] #list of player object pointers
+        self.optionSet = "" #string identifier used to indicate set of options.
        
     channelClass = ClientChannel
 
@@ -96,6 +113,16 @@ class GameMenuServer(PodSixNet.Server.Server):
         for o in range(len(options)):
             transmission[str(o)] = options[o]
         self.playerChannels[playerID].Send(transmission)        
+    
+    def selectOption(self, option, playerID):
+        print("made it into the selectOption function...")
+        print(self.optionSet)
+        if self.optionSet == "room":
+            print("...with correct option set...")
+            if option == 2:
+                print("...and correct option.")
+                self.game.incrementTurn()
+            
     
 print("STARTING SERVER ON LOCALHOST")
 

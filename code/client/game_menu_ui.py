@@ -204,7 +204,7 @@ class GameMenu(ConnectionListener):
         
         for o in range(data['numOptions']):
             self.serverOptions.append(data[str(o)])
-            self.serverOptionsButtons.append(ButtonIcon("button.jpg"))
+            self.serverOptionsButtons.append(ButtonIcon("button2.jpg"))
             
     
 class LocationIcon(object):

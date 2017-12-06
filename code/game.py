@@ -39,6 +39,7 @@ class Game(object):
 
         #start with zero indexed player
         self.whoseTurn = 0
+        self.hasMoved = False
         
         self.initializeRooms()
            
@@ -139,8 +140,12 @@ class Game(object):
         if result == 0:
             #make the move
             player.move(location)
-            self.incrementTurn()
-            return result
+            self.hasMoved = True
+            #if moved to a hallway...
+            if not location.isRoom:
+                #...then turn is over
+                self.incrementTurn()
+                
         return result
         
     def isMoveLegal(self, playerID, locID):
@@ -149,6 +154,7 @@ class Game(object):
         #2 if not adjacent
         #3 if already in the room
         #4 if hall is blocked
+        #5 if already moved
         #0 if move is legal
         
         if self.whoseTurn != playerID:
@@ -157,7 +163,10 @@ class Game(object):
         play = self.players[playerID]
         oldLoc = play.curLocation
         newLoc = self.locations[locID]
-        
+
+        if self.hasMoved:
+            return 5
+            
         if oldLoc.adjLocations.__contains__(newLoc) == False:
             return 2
             
@@ -166,6 +175,8 @@ class Game(object):
             
         if newLoc.isRoom == False and len(newLoc.occupants) > 0:
             return 4
+            
+
             
         return 0
         
@@ -183,6 +194,8 @@ class Game(object):
             self.whoseTurn = 0
         else:
             self.whoseTurn += 1
+            
+        self.hasMoved = False
             
     def getPlayerLocID(self, playerID):
         return self.locations.index(self.players[playerID].curLocation)
