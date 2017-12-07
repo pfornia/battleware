@@ -194,7 +194,7 @@ class Game(object):
         #todo: this.
         print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
         # suggesterPlayer peaks at caseFile
-        # if accusation is incorrect then suggestPlayer loses the game
+        # if accusation is incorrect then suggesterPlayer loses the game
         # else suggesterPlayer wins the game
         # caseFile is revealed to all players
 
