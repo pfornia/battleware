@@ -182,7 +182,7 @@ class Game(object):
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
-        print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " weaponNum)
+        print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
         # move suggesterPlayer to suspectRoom
         # move suspectPlayer to suspectRoom

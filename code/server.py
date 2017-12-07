@@ -23,6 +23,7 @@ class ClientChannel(PodSixNet.Channel.Channel):
                         "End turn"],
                     data["client"])
             else: 
+                self._server.clearAllOptions()
                 self._server.sendTurns()
      
         elif legal == 1:
@@ -114,19 +115,23 @@ class GameMenuServer(PodSixNet.Server.Server):
         self.playerChannels[playerID].Send(transmission)
         
         #clear all other user's options
+        if clearOthers:
+            for p in range(self.numPlayers):
+                if p != playerID:
+                    transmission = {"action": "options", "numOptions": 0}
+                    self.playerChannels[p].Send(transmission)
+    
+    def clearAllOptions(self):
         for p in range(self.numPlayers):
-            if p != playerID:
-                transmission = {"action": "options", "numOptions": 0}
-                print(p)
-                print(self.numPlayers)
-                print(len(self.playerChannels))
-                print(self.playerChannels[p])
-                self.playerChannels[p].Send(transmission)
+            transmission = {"action": "options", "numOptions": 0}
+            self.playerChannels[p].Send(transmission)
+    
     
     def selectOption(self, option, playerID):
         if self.optionSet == "room":
             if option == 2:
                 self.game.incrementTurn()
+                self.clearAllOptions()
                 self.sendTurns()
             
     
