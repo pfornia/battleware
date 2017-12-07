@@ -182,7 +182,7 @@ class Game(object):
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
-        print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
+        # print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
         # move suggesterPlayer to suspectRoom
         # move suspectPlayer to suspectRoom
@@ -203,7 +203,7 @@ class Game(object):
         
     def makeAccusation(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
-        print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
+        # print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
         # suggesterPlayer peaks at caseFile
         # if accusation is incorrect then suggesterPlayer loses the game
         # else suggesterPlayer wins the game

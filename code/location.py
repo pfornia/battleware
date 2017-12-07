@@ -38,7 +38,7 @@ class Room(Location):
         self.adjLocations = []
         self.isRoom = True
 
-        print("room initialized")
+        #print("room initialized")
         
     
     
@@ -53,5 +53,5 @@ class Hallway(Location):
         self.adjLocations = []
         self.isRoom = False
         
-        print("hallway initialized")
+        #print("hallway initialized")
         
