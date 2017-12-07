@@ -19,13 +19,11 @@ testPlayers=[]
 
 testPlayers.append("Michael")
 testPlayers.append("Alice")
-#testPlayers.append("Peter")
-#testPlayers.append("Hercules")
-#testPlayersCount = len(testPlayers)
-threadKiller = False
+testPlayers.append("Peter")
+testPlayers.append("Hercules")
+testPlayersCount = len(testPlayers)
 
 def startServer():
-    #while not TestServer.shutdown:
         print(threading.currentThread().getName(), ' Started a Server thread.')
         call(["python3.4",serverFileName])
         time.sleep(2)
@@ -43,6 +41,8 @@ TestServer.start()
 TestServer._stop = threading.Event()
 TestServer.lock = threading.Lock()
 #TestServer.shut = threading._shutdown()
+mainThread = threading.main_thread
+mainThread._stop = threading.Event()
 time.sleep(1)
 
 for i in testPlayers:
@@ -54,22 +54,16 @@ for i in testPlayers:
 while threading.active_count() > 1:
     time.sleep(1)
     if threading.active_count() == 2:
-        TestServer._stop.set()
+       # TestServer._stop.set()
         #TestServer.shutdown = True
         TestServer._stop = True
-        print("Server closing..........")
+        print("All clients exited.")
         #TestServer._tstate_lock = None
         #TestServer._wait_for_tstate_lock()
-        TestServer.Lock = None
-        TestServer.join()
-
-
-#for i in testPlayers:
-#    i.join()
-#    print(i)
+        TestServer.lock = None
+        #TestServer.join()
+        input("Press Enter to continue...")
+        mainThread._stop = True
+        break
     
-#for thread in threading.enumerate():
-    #thread.join()
-#    print(thread.name)    
-
 print("\nTest End")
