@@ -7,7 +7,7 @@ from card_controller import CardController
 from card_controller import Card
 from location import Location
 from player import Player
-#from client.server import ClientChannel
+from server import *
 import compileall
 import threading
 import time
@@ -21,14 +21,17 @@ testPlayers=("player1", "player2","player3","player4")
 testGame = Game()
 
 for x in testPlayers:
-    x
-    
-testPlayer1 = testGame.addPlayer()
-testPlayer2 = testGame.addPlayer()
-testPlayer3 = testGame.addPlayer()
-testPlayer4 = testGame.addPlayer()
+    x = testGame.addPlayer()
 
-newGame = testGame.initializeGame()
+
+    
+    
+#testPlayer1 = testGame.addPlayer()
+#testPlayer2 = testGame.addPlayer()
+#testPlayer3 = testGame.addPlayer()
+#testPlayer4 = testGame.addPlayer()
+
+#newGame = testGame.initializeGame()
 
 
 

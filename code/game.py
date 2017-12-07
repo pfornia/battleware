@@ -182,10 +182,33 @@ class Game(object):
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
+        print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " weaponNum)
+        # Disprove suggestion
+        # move suggesterPlayer to suspectRoom
+        # move suspectPlayer to suspectRoom
+        # move suspectWeapon to suspectRoom
+        # if suspectPlayer holds suspectPlayercard or suspectRoomcard or 
+        # suspectWeaponcard suspectPlayer reveals suspectPlayercard or 
+        # suspectRoomcard or suspectWeaponcard to suggesterPlayer
+        # else if nextPlayer holds suspectPlayercard or suspectRoomcard 
+        # or suspectWeaponcard nextPlayer reveals suspectPlayercard or 
+        # suspectRoomcard or suspectWeaponcard to suggesterPlayer
+        # else if nextPlayer holds suspectPlayercard or suspectRoomcard 
+        # or suspectWeaponcard nextPlayer reveals suspectPlayercard or 
+        # suspectRoomcard or suspectWeaponcard to suggesterPlayer
+
+        #suggesterPlayer makes an accusation or ends turn
+
         return
         
     def makeAccusation(self, suggesterID, suspectID, roomID, weaponNum):
         #todo: this.
+        print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
+        # suggesterPlayer peaks at caseFile
+        # if accusation is incorrect then suggesterPlayer loses the game
+        # else suggesterPlayer wins the game
+        # caseFile is revealed to all players
+
         return
         
     def incrementTurn(self):

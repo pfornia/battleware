@@ -19,48 +19,51 @@ testPlayers=[]
 
 testPlayers.append("Michael")
 testPlayers.append("Alice")
-#testPlayers.append("Peter")
-#testPlayers.append("Hercules")
+testPlayers.append("Peter")
+testPlayers.append("Hercules")
 testPlayersCount = len(testPlayers)
 
 def startServer():
-    print(threading.currentThread().getName(), 'Executing Server')
-    #compiled = compile('',serverFileName, 'exec')
-    #exec(compiled)
+        print(threading.currentThread().getName(), ' Started a Server thread.')
+        call(["python3.4",serverFileName])
+        time.sleep(2)
+        print(threading.currentThread().getName(), ' Ended a Server thread.')
     
-    call(["python3.4",serverFileName])
-    time.sleep(2)
-    #exec(open(myPyFile).read())
-    #exec(open("./client/server.py").read())
-    #call('python3.4 /server.py')
-    print(threading.currentThread().getName(), 'Closing Server')
-    
-          
 def startBoardGame():
-    print(threading.currentThread().getName(), 'Executing a client session')
+    print(threading.currentThread().getName(), ' Started a client thread.')
     call(["python3.4",clientFileName])
     time.sleep(2)
-    print(threading.currentThread().getName(), 'Closed a client session')
+    print(threading.currentThread().getName(), ' Ended a client thread.')
 
-TestServer = threading.Thread(name='', target=startServer)
+TestServer = threading.Thread(name='Server', target=startServer)
 TestServer.setDaemon(True)
 TestServer.start()
+TestServer._stop = threading.Event()
+TestServer.lock = threading.Lock()
+#TestServer.shut = threading._shutdown()
+mainThread = threading.main_thread
+mainThread._stop = threading.Event()
 time.sleep(1)
 
 for i in testPlayers:
     i = threading.Thread(name=i, target=startBoardGame)
     i.setDaemon(True)
+    time.sleep(2)
     i.start()
 
-#for i in testPlayers:
-#    i.join()
-#    print(i)
-i.join()    
-#for thread in threading.enumerate():
-    #thread.join()
-    #print(thread.name)    
-time.sleep(5)
-
-#TestServer.join()
-        
+while threading.active_count() > 1:
+    time.sleep(1)
+    if threading.active_count() == 2:
+       # TestServer._stop.set()
+        #TestServer.shutdown = True
+        TestServer._stop = True
+        print("All clients exited.")
+        #TestServer._tstate_lock = None
+        #TestServer._wait_for_tstate_lock()
+        TestServer.lock = None
+        #TestServer.join()
+        input("Press Enter to continue...")
+        mainThread._stop = True
+        break
+    
 print("\nTest End")
