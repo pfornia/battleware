@@ -39,6 +39,9 @@ class GameMenu(ConnectionListener):
         self.serverMessage = ""
         self.serverOptions = []
         self.serverOptionsButtons = []
+        self.cardsP = ["bill", "bob"]
+        self.cardsL = ["place", "nowhere"]
+        self.cardsW = ["this", "that"]
         
         #initialize pygame clock
         self.clock=pygame.time.Clock()
@@ -154,9 +157,9 @@ class GameMenu(ConnectionListener):
         labelServer = myfont2.render(self.serverMessage, 1, (255,255,255))
 
         #draw surface
-        self.screen.blit(labelTitle, (10, 20))
         self.screen.blit(labelServer, (50, 70))
         
+        self.screen.blit(labelTitle, (10, 20))
         curY = 120
         curX = 50
         
@@ -168,6 +171,44 @@ class GameMenu(ConnectionListener):
             self.screen.blit(labelOption, (50, curY))
             curY += 30
         
+        # List cards
+        
+        topY = 350
+                
+        labelCards = myfont2.render("My Cards:", 1, (255,255,255))
+        self.screen.blit(labelCards, (curX, topY))
+        
+        curX0 = curX
+        curX1 = curX + 120
+        curX2 = curX + 240
+
+        #Players
+        curY = topY + 80
+        labelCardsP = myfont2.render("Players:", 1, (255,255,255))
+        self.screen.blit(labelCardsP, (curX0, topY + 40))
+        for c in self.cardsP:
+            thisCard = myfont2.render(c, 1, (255,255,255))
+            self.screen.blit(thisCard, (curX0, curY))
+            curY += 30
+
+        #Rooms
+        curY = topY + 80
+        labelCardsL = myfont2.render("Rooms:", 1, (255,255,255))
+        self.screen.blit(labelCardsL, (curX1, topY + 40))
+        for c in self.cardsL:
+            thisCard = myfont2.render(c, 1, (255,255,255))
+            self.screen.blit(thisCard, (curX1, curY))
+            curY += 30            
+
+        #Weapons
+        curY = topY + 80
+        labelCardsW = myfont2.render("Weapons:", 1, (255,255,255))
+        self.screen.blit(labelCardsW, (curX2, topY + 40))
+        for c in self.cardsW:
+            thisCard = myfont2.render(c, 1, (255,255,255))
+            self.screen.blit(thisCard, (curX2, curY))
+            curY += 30            
+            
         pygame.display.flip()
                     
     def Network_startgame(self, data):
