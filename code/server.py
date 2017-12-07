@@ -3,7 +3,10 @@ import PodSixNet.Server
 from time import sleep
 from game import Game
 
-TOTAL_PLAYERS = 2
+from socket import socket, SOCK_DGRAM, AF_INET 
+import socketserver
+
+TOTAL_PLAYERS = 4
     
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
@@ -133,11 +136,31 @@ class GameMenuServer(PodSixNet.Server.Server):
                 self.game.incrementTurn()
                 self.clearAllOptions()
                 self.sendTurns()
-            
-    
-print("STARTING SERVER ON LOCALHOST")
 
-gameServe=GameMenuServer(localaddr=('localhost', 1337))
+        
+try:    
+    #To use local active IP address
+    s = socket(AF_INET, SOCK_DGRAM) 
+    s.connect(('8.8.8.8', 0))
+    localIP = s.getsockname()
+    #print(localIP)   
+    s.close()
+    splitIP = str(localIP).split('.')
+    onlyIP = str(localIP).split('\'')
+    splitIP[3:] = (['0/24'])
+    IPRange = ".".join(splitIP)
+    #Not needed but saving it
+    splitFields = str(localIP).split(',')
+    splitIP[1:] = (['1338)'])
+    newAddress = ",".join(splitFields)
+    myLink = (str(onlyIP[1]),1338)
+except:
+    print("No network connection found, trying localhost.")
+    myLink = ('localhost',1339)
+
+print("STARTING SERVER ON " + str(myLink))
+gameServe=GameMenuServer(localaddr=myLink)
+
 while True:
     gameServe.Pump()
-    sleep(0.01)
+    sleep(0.01)  

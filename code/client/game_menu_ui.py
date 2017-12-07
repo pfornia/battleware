@@ -4,6 +4,9 @@ import os, sys
 import pygame
 from pygame.locals import *
 
+from socket import socket, SOCK_DGRAM, AF_INET 
+import socketserver
+
 #def main():
 
 PLAYER_NAMES = ["Miss Scarlet",
@@ -88,7 +91,30 @@ class GameMenu(ConnectionListener):
         
         self.numPlayers = 0
         
-        self.Connect(('localhost', 1337))
+        try:
+            #To use local active IP address
+            s = socket(AF_INET, SOCK_DGRAM)
+            s.connect(('8.8.8.8', 80))
+            localIP = s.getsockname()
+            #print(localIP)   
+            s.close()
+            splitIP = str(localIP).split('.')
+            onlyIP = str(localIP).split('\'')
+            splitIP[3:] = (['0/24'])
+            IPRange = ".".join(splitIP)
+            #Not needed but saving it
+            splitFields = str(localIP).split(',')
+            splitIP[1:] = (['1338)'])
+            newAddress = ",".join(splitFields)
+            myLink = (str(onlyIP[1]),1338)
+        except:
+            print("No network connection found, trying localhost.")
+            myLink = ('localhost',1339)
+        
+        print("STARTING CLIENT ON " + str(myLink))
+        
+        #self.Connect(('localhost', 1337))
+        self.Connect(myLink)
         
         '''
         self.running=False
