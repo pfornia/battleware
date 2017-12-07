@@ -76,8 +76,7 @@ class GameMenuServer(PodSixNet.Server.Server):
                             "player":p, 
                             "numPlayers": TOTAL_PLAYERS})  
                     self.sendMessage("All player's have arrived. Let's begin!", p)
-                    self.sendOptions(["give up", "fight!"], p)
-                self.numPlayers+=1   
+                    #self.sendOptions(["give up", "fight!"], p)
                 self.sendPositions()
        
     #tell all clients all board positions
@@ -108,20 +107,27 @@ class GameMenuServer(PodSixNet.Server.Server):
                 self.sendMessage(message, p)
 
     #Send generic options to a player's HUD
-    def sendOptions(self, options, playerID):
+    def sendOptions(self, options, playerID, clearOthers = True):
         transmission = {"action": "options", "numOptions": len(options)}
         for o in range(len(options)):
             transmission[str(o)] = options[o]
-        self.playerChannels[playerID].Send(transmission)        
+        self.playerChannels[playerID].Send(transmission)
+        
+        #clear all other user's options
+        for p in range(self.numPlayers):
+            if p != playerID:
+                transmission = {"action": "options", "numOptions": 0}
+                print(p)
+                print(self.numPlayers)
+                print(len(self.playerChannels))
+                print(self.playerChannels[p])
+                self.playerChannels[p].Send(transmission)
     
     def selectOption(self, option, playerID):
-        print("made it into the selectOption function...")
-        print(self.optionSet)
         if self.optionSet == "room":
-            print("...with correct option set...")
             if option == 2:
-                print("...and correct option.")
                 self.game.incrementTurn()
+                self.sendTurns()
             
     
 print("STARTING SERVER ON LOCALHOST")
