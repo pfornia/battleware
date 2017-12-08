@@ -15,6 +15,23 @@ PLAYER_NAMES = ["Miss Scarlet",
     "Mr Green",
     "Mrs Peacock",
     "Prof Plum"]
+    
+WEAPONS = ["Rope",
+    "Lead Pipe",
+    "Knife",
+    "Wrench",
+    "Candlestick",
+    "Revolver"]
+    
+ROOM_NAMES = ["Study",
+    "Hall",
+    "Lounge",
+    "Library",
+    "Billiard Room",
+    "Dining Room",
+    "Conservatory",
+    "Ballroom",
+    "Kitchen"]
 
 class GameMenu(ConnectionListener):
     '''
@@ -42,9 +59,9 @@ class GameMenu(ConnectionListener):
         self.serverMessage = ""
         self.serverOptions = []
         self.serverOptionsButtons = []
-        self.cardsP = ["bill", "bob"]
-        self.cardsL = ["place", "nowhere"]
-        self.cardsW = ["this", "that"]
+        self.cardsP = []
+        self.cardsR = []
+        self.cardsW = []
         
         #initialize pygame clock
         self.clock=pygame.time.Clock()
@@ -183,10 +200,10 @@ class GameMenu(ConnectionListener):
         labelServer = myfont2.render(self.serverMessage, 1, (255,255,255))
 
         #draw surface
-        self.screen.blit(labelServer, (50, 70))
+        self.screen.blit(labelServer, (50, 50))
         
-        self.screen.blit(labelTitle, (10, 20))
-        curY = 120
+        self.screen.blit(labelTitle, (10, 12))
+        curY = 80
         curX = 50
         
         for o in range(len(self.serverOptions)):
@@ -199,7 +216,7 @@ class GameMenu(ConnectionListener):
         
         # List cards
         
-        topY = 350
+        topY = 360
                 
         labelCards = myfont2.render("My Cards:", 1, (255,255,255))
         self.screen.blit(labelCards, (curX, topY))
@@ -209,31 +226,31 @@ class GameMenu(ConnectionListener):
         curX2 = curX + 240
 
         #Players
-        curY = topY + 80
+        curY = topY + 60
         labelCardsP = myfont2.render("Players:", 1, (255,255,255))
-        self.screen.blit(labelCardsP, (curX0, topY + 40))
+        self.screen.blit(labelCardsP, (curX0, topY + 30))
         for c in self.cardsP:
             thisCard = myfont2.render(c, 1, (255,255,255))
             self.screen.blit(thisCard, (curX0, curY))
-            curY += 30
+            curY += 22
 
         #Rooms
-        curY = topY + 80
-        labelCardsL = myfont2.render("Rooms:", 1, (255,255,255))
-        self.screen.blit(labelCardsL, (curX1, topY + 40))
-        for c in self.cardsL:
+        curY = topY + 60
+        labelCardsR = myfont2.render("Rooms:", 1, (255,255,255))
+        self.screen.blit(labelCardsR, (curX1, topY + 30))
+        for c in self.cardsR:
             thisCard = myfont2.render(c, 1, (255,255,255))
             self.screen.blit(thisCard, (curX1, curY))
-            curY += 30            
+            curY += 22           
 
         #Weapons
-        curY = topY + 80
+        curY = topY + 60
         labelCardsW = myfont2.render("Weapons:", 1, (255,255,255))
-        self.screen.blit(labelCardsW, (curX2, topY + 40))
+        self.screen.blit(labelCardsW, (curX2, topY + 30))
         for c in self.cardsW:
             thisCard = myfont2.render(c, 1, (255,255,255))
             self.screen.blit(thisCard, (curX2, curY))
-            curY += 30            
+            curY += 22            
             
         pygame.display.flip()
                     
@@ -246,6 +263,19 @@ class GameMenu(ConnectionListener):
         self.titleMessage = "Welcome " + PLAYER_NAMES[self.myPlayerID] + "!"
         print(self.myPlayerID)
 
+    def Network_setCards(self, data):
+        
+        #Set cards to corresponding list
+        if data["cardType"] == "P":
+            for c in range(data["numCards"]):
+                self.cardsP.append(PLAYER_NAMES[data[str(c)]])
+        elif data["cardType"] == "R":
+            for c in range(data["numCards"]):
+                self.cardsR.append(ROOM_NAMES[data[str(c)]])
+        elif data["cardType"] == "W":
+            for c in range(data["numCards"]):
+                self.cardsW.append(WEAPONS[data[str(c)]])
+            
     def Network_updatePositions(self, data):
         #self.running=True
         print("updating positions...")

@@ -7,9 +7,9 @@ class Card(object):
         cardType: 
     
     '''
-    def __init__(self, subject, thisType):
+    def __init__(self, subjectID, thisType):
         self.cardType = thisType
-        self.subject = subject
+        self.subjectID = subjectID
         print("created a new card.")
 
 class CardController(object):
@@ -23,16 +23,16 @@ class CardController(object):
         '''Return an initialized Game object'''
         #player cards do not exist until players join
         self.playerCards = []
-        for p in players:
+        for p in range(len(players)):
             self.playerCards.append(Card(p, "P"))
         #todo: initialize weapons cards
         self.weaponsCards = []
-        for w in weapons:
+        for w in range(len(weapons)):
             self.weaponsCards.append(Card(w, "W"))
         #todo: initialize room cards
         self.roomCards = []
-        for l in locations:
-            if l.isRoom:
+        for l in range(len(locations)):
+            if locations[l].isRoom:
                 self.roomCards.append(Card(l, "R"))
 
         
@@ -45,13 +45,13 @@ class CardController(object):
         
     def createCaseFile(self):
         #make these random
-        shuffle(playerCards)
-        shuffle(weaponCards)
-        shuffle(roomCards)
+        shuffle(self.playerCards)
+        shuffle(self.weaponsCards)
+        shuffle(self.roomCards)
         self.caseEnvelope = []
-        self.caseEnvelope.append(playerCards[0])
-        self.caseEnvelope.append(weaponsCards[0])
-        self.caseEnvelope.append(roomCards[0])
+        self.caseEnvelope.append(self.playerCards[0])
+        self.caseEnvelope.append(self.weaponsCards[0])
+        self.caseEnvelope.append(self.roomCards[0])
         
     def distributeCards(self, players):
         #distribute the cards randomly: do we need random in createCaseFile and distributeCards?
@@ -59,10 +59,27 @@ class CardController(object):
         #for all remaining cards???
         #do we need a loop to distribute cards?
         #cards are combined after createCaseFile CLUE SETUP 5
-        players[0].addCard(playerCards[1])
-        players[0].addCard(weaponsCards[1])
-        players[0].addCard(roomCards[1])
+        nextPlayer = 0
         
+        for p in range(1,len(self.playerCards)):
+            players[nextPlayer].addCard(self.playerCards[p])
+            if nextPlayer >= len(players) - 1:
+                nextPlayer = 0
+            else:
+                nextPlayer += 1
+        for w in range(1,len(self.weaponsCards)):
+            players[nextPlayer].addCard(self.weaponsCards[w])
+            if nextPlayer >= len(players) - 1:
+                nextPlayer = 0
+            else:
+                nextPlayer += 1
+        for r in range(1,len(self.roomCards)):
+            players[nextPlayer].addCard(self.roomCards[r])
+            if nextPlayer >= len(players) - 1:
+                nextPlayer = 0
+            else:
+                nextPlayer += 1
+                
     def checkAccusation(self, cardSet):
         #todo: if all three cards in set are in caseEnvelope (in any order), return true
         return False

@@ -8,7 +8,9 @@ class Player(object):
     def __init__(self, name, location):
         '''Return an initialized Player object'''
         self.name = name
-        self.myCards = []
+        self.myCardsP = []
+        self.myCardsR = []
+        self.myCardsW = []
         self.curLocation = location #how to initialize?
         location.addOccupant(self)
         
@@ -30,7 +32,12 @@ class Player(object):
         
         
     def addCard(self, card):
-        self.myCards.append(card)
-        
+        if card.cardType == "P":
+            self.myCardsP.append(card.subjectID)
+        elif card.cardType == "R":
+            self.myCardsR.append(card.subjectID)
+        elif card.cardType == "W":
+            self.myCardsW.append(card.subjectID)
+            
     def getCards(self):
         return self.myCards

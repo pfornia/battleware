@@ -20,6 +20,16 @@ WEAPONS = ["Rope",
     "Wrench",
     "Candlestick",
     "Revolver"]
+    
+ROOM_NAMES = ["Study",
+    "Hall",
+    "Lounge",
+    "Library",
+    "Billiard Room",
+    "Dining Room",
+    "Conservatory",
+    "Ballroom",
+    "Kitchen"]
 
 class Game(object):
     '''An instance of a single game of "Clue-less"
@@ -49,15 +59,8 @@ class Game(object):
     def initializeRooms(self):
         #Initialize complete list of all rooms and hallways
         self.locations = []
-        self.locations.append(Room("Study"))
-        self.locations.append(Room("Hall"))
-        self.locations.append(Room("Lounge"))
-        self.locations.append(Room("Library"))
-        self.locations.append(Room("Billiard Room"))
-        self.locations.append(Room("Dining Room"))
-        self.locations.append(Room("Conservatory"))
-        self.locations.append(Room("Ballroom"))
-        self.locations.append(Room("Kitchen"))
+        for r in ROOM_NAMES:
+            self.locations.append(Room(r))
         
         for i in range(0, 12):
             self.locations.append(Hallway("H" + str(i)))   
@@ -130,7 +133,7 @@ class Game(object):
         self.cardController = CardController(self.players,
             self.locations,
             WEAPONS)
-        self.cardController.distributeCards()
+        #self.cardController.distributeCards() Done in initialization I think.
         
         
     def makeMove(self, playerID, locID):
@@ -181,6 +184,9 @@ class Game(object):
         return 0
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
+        self.curSugP = suspectID
+        self.curSugL = roomID
+        self.curSugW = weaponNum
         #todo: this.
         # print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
@@ -225,3 +231,11 @@ class Game(object):
         
     def getPlayerName(self, playerID):
         return PLAYER_NAMES[playerID]
+        
+    def getPlayerCards(self, playerID, cardType):
+        if cardType == "P":
+            return self.players[playerID].myCardsP
+        elif cardType == "R":
+            return self.players[playerID].myCardsR
+        elif cardType == "W":
+            return self.players[playerID].myCardsW

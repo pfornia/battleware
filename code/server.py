@@ -6,7 +6,33 @@ from game import Game
 from socket import socket, SOCK_DGRAM, AF_INET 
 import socketserver
 
-TOTAL_PLAYERS = 4
+TOTAL_PLAYERS = 1
+    
+PLAYER_NAMES = ["Miss Scarlet",
+    "Col Mustard",
+    "Mrs White",
+    "Mr Green",
+    "Mrs Peacock",
+    "Prof Plum"]
+    
+WEAPONS = ["Rope",
+    "Lead Pipe",
+    "Knife",
+    "Wrench",
+    "Candlestick",
+    "Revolver"]
+    
+ROOM_NAMES = ["Study",
+    "Hall",
+    "Lounge",
+    "Library",
+    "Billiard Room",
+    "Dining Room",
+    "Conservatory",
+    "Ballroom",
+    "Kitchen"]
+    
+
     
 class ClientChannel(PodSixNet.Channel.Channel):
     def Network(self, data):
@@ -61,6 +87,10 @@ class GameMenuServer(PodSixNet.Server.Server):
         self.players = [] #list of player object pointers
         self.optionSet = "" #string identifier used to indicate set of options.
        
+        self.curSugP = -1
+        self.curSugL = -1
+        self.curSugW = -1
+
     channelClass = ClientChannel
 
     
@@ -75,12 +105,14 @@ class GameMenuServer(PodSixNet.Server.Server):
             self.numPlayers+=1
             
             if self.numPlayers == TOTAL_PLAYERS:
+                #Start the game
+                self.game.initializeGame()
                 for p in range(len(self.playerChannels)):
+                    self.sendCards(p)
                     self.playerChannels[p].Send({"action": "startgame",
                             "player":p, 
                             "numPlayers": TOTAL_PLAYERS})  
                     self.sendMessage("All player's have arrived. Let's begin!", p)
-                    #self.sendOptions(["give up", "fight!"], p)
                 self.sendPositions()
        
     #tell all clients all board positions
@@ -101,6 +133,10 @@ class GameMenuServer(PodSixNet.Server.Server):
         transmission = {"action": "message", "message": message}
         self.playerChannels[playerID].Send(transmission)
         
+    def sendMessageAll(self, message):
+        for p in range(len(self.playerChannels)):
+            self.sendMessage(message, p)
+      
     def sendTurns(self):
         for p in range(len(self.players)):
             turn = self.game.whoseTurn
@@ -109,7 +145,37 @@ class GameMenuServer(PodSixNet.Server.Server):
             else:
                 message = "Waiting for " + self.game.getPlayerName(turn) + "..."
                 self.sendMessage(message, p)
-
+                
+    def sendCards(self, playerID):
+        cardsP = self.game.getPlayerCards(playerID, "P")
+        print(cardsP)
+        transmission = {"action": "setCards", 
+            "cardType": "P", 
+            "numCards": len(cardsP)}
+        for c in range(len(cardsP)):
+            transmission[str(c)] = cardsP[c]
+        self.playerChannels[playerID].Send(transmission)
+        
+        cardsR = self.game.getPlayerCards(playerID, "R")
+        transmission = {"action": "setCards", 
+            "cardType": "R", 
+            "numCards": len(cardsR)}
+        for c in range(len(cardsR)):
+            transmission[str(c)] = cardsR[c]        
+        self.playerChannels[playerID].Send(transmission)
+        
+        cardsW = self.game.getPlayerCards(playerID, "W")
+        transmission = {"action": "setCards", 
+            "cardType": "W", 
+            "numCards": len(cardsW)}
+        for c in range(len(cardsW)):
+            transmission[str(c)] = cardsW[c]        
+        self.playerChannels[playerID].Send(transmission)
+        
+        
+        
+        
+        
     #Send generic options to a player's HUD
     def sendOptions(self, options, playerID, clearOthers = True):
         transmission = {"action": "options", "numOptions": len(options)}
@@ -131,12 +197,37 @@ class GameMenuServer(PodSixNet.Server.Server):
     
     
     def selectOption(self, option, playerID):
-        if self.optionSet == "room":
+        if self.optionSet == "room":               
             if option == 2:
                 self.game.incrementTurn()
                 self.clearAllOptions()
                 self.sendTurns()
-
+                return
+            else:
+                #cardsL = ROOM_NAMES
+                #cardsW = WEAPONS
+                if option == 0:
+                    self.optionSet = "suggestionP"
+                else:
+                    self.optionSet = "accusationP"
+                self.sendOptions(PLAYER_NAMES[0:TOTAL_PLAYERS], playerID)
+        elif self.optionSet == "suggestionP":
+            print("hello")
+            self.curSugP = option
+            self.optionSet = "suggestionL"
+            self.sendOptions(ROOM_NAMES, playerID)
+        elif self.optionSet == "suggestionL":
+            self.curSugL = option
+            self.optionSet = "suggestionW"
+            self.sendOptions(WEAPONS, playerID)
+        elif self.optionSet == "suggestionW":
+            self.curSugW = option
+            self.optionSet = "disprove"
+            self.sendMessageAll("Interviewing witnesses...")
+            self.game.makeSuggestion(playerID, self.curSugP, self.curSugL, self.curSugW)
+            #self.sendOptions(???, ??playerID??)
+            
+            print("suggestion: ", self.curSugP, self.curSugL, self.curSugW)
         
 try:    
     #To use local active IP address
