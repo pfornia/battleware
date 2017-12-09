@@ -28,7 +28,18 @@ def startServer():
         call(["python3.4",serverFileName])
         time.sleep(2)
         print(threading.currentThread().getName(), ' Ended a Server thread.')
-    
+        #Code for Server thread monitors thread count and exit
+        t_end = time.monotonic() + 10
+        while time.monotonic() < t_end:
+            #Wait for other threads to startServer
+            time.sleep(1)
+        while threading.active_count() > 1:
+            time.sleep(1)
+            if threading.active_count() < 3:
+                TestServer._stop = True
+                break
+            break
+
 def startBoardGame():
     print(threading.currentThread().getName(), ' Started a client thread.')
     call(["python3.4",clientFileName])
@@ -36,7 +47,7 @@ def startBoardGame():
     print(threading.currentThread().getName(), ' Ended a client thread.')
 
 TestServer = threading.Thread(name='Server', target=startServer)
-TestServer.setDaemon(True)
+TestServer.setDaemon(False)
 TestServer.start()
 TestServer._stop = threading.Event()
 TestServer.lock = threading.Lock()
@@ -56,14 +67,17 @@ while threading.active_count() > 1:
     if threading.active_count() == 2:
        # TestServer._stop.set()
         #TestServer.shutdown = True
-        TestServer._stop = True
-        print("All clients exited.")
+        print("All clients should exited by now.")
         #TestServer._tstate_lock = None
         #TestServer._wait_for_tstate_lock()
         TestServer.lock = None
         #TestServer.join()
-        input("Press Enter to continue...")
-        mainThread._stop = True
+        print("Threads left: ", threading.active_count())
+        input("Press Enter to end the test...")
+        TestServer._stop = True
         break
     
-print("\nTest End")
+print("\nTest End. Press Ctl + c to exit.")
+
+
+
