@@ -131,9 +131,11 @@ class GameMenu(ConnectionListener):
             print("No network connection found, trying localhost.")
             myLink = ('localhost',1339)
         
-        print("STARTING CLIENT ON " + str(myLink))
+        wanLink = ('bw.nathansdoorway.com', 55123)
         
-        self.Connect(('bw.nathansdoorway.com', 55123))
+        print("STARTING CLIENT ON " + str(wanLink))
+        
+        self.Connect(wanLink)
         #self.Connect(myLink)
         
         '''
