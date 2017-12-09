@@ -54,10 +54,10 @@ class Game(object):
         self.initializeRooms()
         
         self.curSugP = None
-        self.curSugL = None
+        self.curSugR = None
         self.curSugW = None
         
-        self.disproveTurn = None
+        self.disproverTurn = None
 
            
         print("game initialized! Waiting for players to join...")
@@ -196,21 +196,16 @@ class Game(object):
         
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         self.curSugP = suspectID
-        self.curSugL = roomID
+        self.curSugR = roomID
         self.curSugW = weaponNum
         
-        self.disproveTurn = self.rotate(suggesterID)
+        self.disproverTurn = self.rotate(suggesterID)
         
         #todo: this.
         # print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
         # move suggesterPlayer to suspectRoom
-        print(roomID)
-        print("before:")
-        print(self.getPlayerLocID(suspectID))
         self.makeMove(suspectID, roomID, True)
-        print("after:")
-        print(self.getPlayerLocID(suspectID))
         # move suspectPlayer to suspectRoom
         # move suspectWeapon to suspectRoom
         # if suspectPlayer holds suspectPlayercard or suspectRoomcard or 
@@ -228,7 +223,7 @@ class Game(object):
     def makeAccusation(self, suspectID, roomID, weaponNum):
         #todo: this.
         self.curSugP = suspectID
-        self.curSugL = roomID
+        self.curSugR = roomID
         self.curSugW = weaponNum
         # print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
         # suggesterPlayer peaks at caseFile
@@ -262,6 +257,17 @@ class Game(object):
             return self.players[playerID].myCardsR
         elif cardType == "W":
             return self.players[playerID].myCardsW
+            
+    def getSugCards(self):
+        disprover = self.players[self.disproverTurn]
+        output = []
+        if self.curSugP in disprover.myCardsP:
+            output.append("P")
+        if self.curSugR in disprover.myCardsR:
+            output.append("R")
+        if self.curSugW in disprover.myCardsW:
+            output.append("R")
+        return output
             
     def rotate(self, x):
         if x >= len(self.players) - 1:

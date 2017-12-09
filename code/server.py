@@ -88,7 +88,7 @@ class GameMenuServer(PodSixNet.Server.Server):
         self.optionSet = "" #string identifier used to indicate set of options.
        
         self.curSugP = None
-        self.curSugL = None
+        self.curSugR = None
         self.curSugW = None
 
     channelClass = ClientChannel
@@ -139,8 +139,8 @@ class GameMenuServer(PodSixNet.Server.Server):
             self.sendMessage(message, p)
       
     def sendTurns(self):
+        turn = self.game.whoseTurn
         for p in range(len(self.players)):
-            turn = self.game.whoseTurn
             if turn == p:
                 self.sendMessage("Your Turn!", p)
             else:
@@ -218,25 +218,18 @@ class GameMenuServer(PodSixNet.Server.Server):
             self.optionSet = "suggestionW"
             self.sendMessage("What was the weapon?", playerID)
             #room must be current room
-            self.curSugL = self.game.getPlayerLocID(playerID)
+            self.curSugR = self.game.getPlayerLocID(playerID)
             self.sendOptions(WEAPONS, playerID)
-        #elif self.optionSet == "suggestionL":
-        #    self.curSugL = option
-        #    self.optionSet = "suggestionW"
-        #    self.sendMessage("What was the weapon?", playerID)
-        #    self.sendOptions(WEAPONS, playerID)
-        
         elif self.optionSet == "suggestionW":
             self.curSugW = option
-            self.optionSet = "disprove"
             self.sendMessageAll(PLAYER_NAMES[playerID] + " suggests: '" +
                                 PLAYER_NAMES[self.curSugP] + " in the " +
-                                ROOM_NAMES[self.curSugL] + " with the " +
+                                ROOM_NAMES[self.curSugR] + " with the " +
                                 WEAPONS[self.curSugW] + "!' Interviewing Witnesses...")
-            self.game.makeSuggestion(playerID, self.curSugP, self.curSugL, self.curSugW)
+            self.game.makeSuggestion(playerID, self.curSugP, self.curSugR, self.curSugW)
             self.sendPositions()
             self.clearAllOptions()
-            #self.sendOptions(???, ??playerID??)
+            self.disprove(playerID)
          
         elif self.optionSet == "accusationP":
             self.curSugP = option
@@ -244,22 +237,46 @@ class GameMenuServer(PodSixNet.Server.Server):
             self.sendMessage("Where did they do it?", playerID)
             self.sendOptions(ROOM_NAMES, playerID)
         elif self.optionSet == "accusationL":
-            self.curSugL = option
+            self.curSugR = option
             self.optionSet = "accusationW"
             self.sendMessage("What was the weapon?", playerID)
             self.sendOptions(WEAPONS, playerID)
         elif self.optionSet == "accusationW":
             self.curSugW = option
             self.optionSet = "ok"
-            win = self.game.makeAccusation(self.curSugP, self.curSugL, self.curSugW)
+            win = self.game.makeAccusation(self.curSugP, self.curSugR, self.curSugW)
             if win:
                 self.clearAllOptions()
                 self.sendMessageAll(PLAYER_NAMES[playerID] + " WINS!!")
             else:
                 self.clearAllOptions()
                 self.sendMessageAll(PLAYER_NAMES[playerID] + " falsely accused... They lose!")
-            #self.sendOptions(???, ??playerID??)    
+    
+    def disprove(self, accuser):
+        disprover = self.game.disproverTurn
+        #if disprove turn makes it back to the accuser
+        if disprover == accuser:
+            self.sendMessageAll("Suggesting was not disproven!!")
+            self.clearAllOptions()
+            self.game.incrementTurn()
+            self.sendTurns()
+        else: 
+            self.optionSet = "disprove"
+            #get from game somehow??
+            self.disproveCardTypes = self.game.getSugCards()
+            options = []
+            for i in range(len(self.disproveCardTypes)):
+                if self.disproveCardTypes[i] == "P":
+                    options.append("Show card: " + PLAYER_NAMES[self.curSugP])
+            for i in range(len(self.disproveCardTypes)):
+                if self.disproveCardTypes[i] == "R":
+                    options.append("Show card: " + ROOM_NAMES[self.curSugR])
+            for i in range(len(self.disproveCardTypes)):
+                if self.disproveCardTypes[i] == "W":
+                    options.append("Show card: " + WEAPONS[self.curSugW])
             
+            self.sendOptions(options, disprover)
+
         
 try:    
     #To use local active IP address
