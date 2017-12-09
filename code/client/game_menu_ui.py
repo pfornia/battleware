@@ -133,7 +133,7 @@ class GameMenu(ConnectionListener):
         
         print("STARTING CLIENT ON " + str(myLink))
         
-        self.Connect(('battleware.nathansdoorway.com', 1337))
+        self.Connect(('bw.nathansdoorway.com', 1337))
         #self.Connect(myLink)
         
         '''
