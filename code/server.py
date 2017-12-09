@@ -6,7 +6,7 @@ from game import Game
 from socket import socket, SOCK_DGRAM, AF_INET 
 import socketserver
 
-TOTAL_PLAYERS = 2
+TOTAL_PLAYERS = 3
     
 PLAYER_NAMES = ["Miss Scarlet",
     "Col Mustard",
@@ -74,8 +74,6 @@ class ClientChannel(PodSixNet.Channel.Channel):
     #def Close(self):
     #    self._server.close(self.gameid)
     
-    
-        
 class GameMenuServer(PodSixNet.Server.Server):
     
     
@@ -198,7 +196,11 @@ class GameMenuServer(PodSixNet.Server.Server):
     
     
     def selectOption(self, option, playerID):
-        if self.optionSet == "room":               
+        if self.optionSet == "ok":
+            self.game.incrementTurn()
+            self.clearAllOptions()
+            self.sendTurns() 
+        elif self.optionSet == "room":               
             if option == 2:
                 self.game.incrementTurn()
                 self.clearAllOptions()
@@ -251,6 +253,23 @@ class GameMenuServer(PodSixNet.Server.Server):
             else:
                 self.clearAllOptions()
                 self.sendMessageAll(PLAYER_NAMES[playerID] + " falsely accused... They lose!")
+                
+        elif self.optionSet == "disprove":
+            accuser = self.game.whoseTurn
+            disprover = playerID
+            if self.disproveCardTypes[option] == "P":
+                cardText = PLAYER_NAMES[self.curSugP]
+            elif self.disproveCardTypes[option] == "R":
+                cardText = ROOM_NAMES[self.curSugR]                
+            elif self.disproveCardTypes[option] == "W":
+                cardText = WEAPONS[self.curSugW]                
+
+            self.sendMessage(PLAYER_NAMES[disprover] + " shows you a card: " + cardText, accuser)
+            self.sendMessage("You show " + PLAYER_NAMES[accuser] + " a card: " + cardText, disprover)
+            self.clearAllOptions()
+            self.optionSet = "ok"
+            self.sendOptions(["OK"], accuser)
+            
     
     def disprove(self, accuser):
         disprover = self.game.disproverTurn
@@ -268,14 +287,16 @@ class GameMenuServer(PodSixNet.Server.Server):
             for i in range(len(self.disproveCardTypes)):
                 if self.disproveCardTypes[i] == "P":
                     options.append("Show card: " + PLAYER_NAMES[self.curSugP])
-            for i in range(len(self.disproveCardTypes)):
-                if self.disproveCardTypes[i] == "R":
+                elif self.disproveCardTypes[i] == "R":
                     options.append("Show card: " + ROOM_NAMES[self.curSugR])
-            for i in range(len(self.disproveCardTypes)):
-                if self.disproveCardTypes[i] == "W":
+                elif self.disproveCardTypes[i] == "W":
                     options.append("Show card: " + WEAPONS[self.curSugW])
             
-            self.sendOptions(options, disprover)
+            if len(options) == 0:
+                self.game.rotateDisprover()
+                self.disprove(accuser)
+            else:
+                self.sendOptions(options, disprover)
 
         
 try:    

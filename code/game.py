@@ -194,6 +194,9 @@ class Game(object):
             
         return 0
         
+    def rotateDisprover(self):
+        self.disproverTurn = self.rotate(self.disproverTurn)
+        
     def makeSuggestion(self, suggesterID, suspectID, roomID, weaponNum):
         self.curSugP = suspectID
         self.curSugR = roomID
