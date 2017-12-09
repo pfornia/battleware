@@ -6,7 +6,7 @@ from game import Game
 from socket import socket, SOCK_DGRAM, AF_INET 
 import socketserver
 
-TOTAL_PLAYERS = 3
+TOTAL_PLAYERS = 1
     
 PLAYER_NAMES = ["Miss Scarlet",
     "Col Mustard",
