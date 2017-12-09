@@ -50,8 +50,9 @@ class CardController(object):
         shuffle(self.roomCards)
         self.caseEnvelope = []
         self.caseEnvelope.append(self.playerCards[0])
-        self.caseEnvelope.append(self.weaponsCards[0])
         self.caseEnvelope.append(self.roomCards[0])
+        self.caseEnvelope.append(self.weaponsCards[0])
+
         
     def distributeCards(self, players):
         #distribute the cards randomly: do we need random in createCaseFile and distributeCards?
@@ -67,20 +68,27 @@ class CardController(object):
                 nextPlayer = 0
             else:
                 nextPlayer += 1
-        for w in range(1,len(self.weaponsCards)):
-            players[nextPlayer].addCard(self.weaponsCards[w])
-            if nextPlayer >= len(players) - 1:
-                nextPlayer = 0
-            else:
-                nextPlayer += 1
         for r in range(1,len(self.roomCards)):
             players[nextPlayer].addCard(self.roomCards[r])
             if nextPlayer >= len(players) - 1:
                 nextPlayer = 0
             else:
                 nextPlayer += 1
+        for w in range(1,len(self.weaponsCards)):
+            players[nextPlayer].addCard(self.weaponsCards[w])
+            if nextPlayer >= len(players) - 1:
+                nextPlayer = 0
+            else:
+                nextPlayer += 1
+
                 
-    def checkAccusation(self, cardSet):
-        #todo: if all three cards in set are in caseEnvelope (in any order), return true
-        return False
+    def checkAccusation(self, suspectID, roomID, weaponNum):
+    
+        if (suspectID == self.caseEnvelope[0].subjectID and
+        roomID == self.caseEnvelope[1].subjectID and
+        weaponNum == self.caseEnvelope[2].subjectID):
+            return True
+        else:
+            return False
+            
         

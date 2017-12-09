@@ -6,7 +6,7 @@ from game import Game
 from socket import socket, SOCK_DGRAM, AF_INET 
 import socketserver
 
-TOTAL_PLAYERS = 1
+TOTAL_PLAYERS = 2
     
 PLAYER_NAMES = ["Miss Scarlet",
     "Col Mustard",
@@ -87,9 +87,9 @@ class GameMenuServer(PodSixNet.Server.Server):
         self.players = [] #list of player object pointers
         self.optionSet = "" #string identifier used to indicate set of options.
        
-        self.curSugP = -1
-        self.curSugL = -1
-        self.curSugW = -1
+        self.curSugP = None
+        self.curSugL = None
+        self.curSugW = None
 
     channelClass = ClientChannel
 
@@ -228,6 +228,25 @@ class GameMenuServer(PodSixNet.Server.Server):
             #self.sendOptions(???, ??playerID??)
             
             print("suggestion: ", self.curSugP, self.curSugL, self.curSugW)
+            
+        elif self.optionSet == "accusationP":
+            print("hello")
+            self.curSugP = option
+            self.optionSet = "accusationL"
+            self.sendOptions(ROOM_NAMES, playerID)
+        elif self.optionSet == "accusationL":
+            self.curSugL = option
+            self.optionSet = "accusationW"
+            self.sendOptions(WEAPONS, playerID)
+        elif self.optionSet == "accusationW":
+            self.curSugW = option
+            self.optionSet = "ok"
+            win = self.game.makeAccusation(self.curSugP, self.curSugL, self.curSugW)
+            if win:
+                self.clearAllOptions()
+                self.sendMessageAll(PLAYER_NAMES[playerID] + " WINS!!")
+            #self.sendOptions(???, ??playerID??)    
+            
         
 try:    
     #To use local active IP address

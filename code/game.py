@@ -52,6 +52,13 @@ class Game(object):
         self.hasMoved = False
         
         self.initializeRooms()
+        
+        self.curSugP = None
+        self.curSugL = None
+        self.curSugW = None
+        
+        self.disproveTurn = None
+
            
         print("game initialized! Waiting for players to join...")
         
@@ -187,10 +194,14 @@ class Game(object):
         self.curSugP = suspectID
         self.curSugL = roomID
         self.curSugW = weaponNum
+        
+        self.disproveTurn = self.rotate(suggesterID)
+        
         #todo: this.
         # print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
         # move suggesterPlayer to suspectRoom
+        self.makeMove(suspectID, roomID)
         # move suspectPlayer to suspectRoom
         # move suspectWeapon to suspectRoom
         # if suspectPlayer holds suspectPlayercard or suspectRoomcard or 
@@ -207,22 +218,26 @@ class Game(object):
 
         return
         
-    def makeAccusation(self, suggesterID, suspectID, roomID, weaponNum):
+    def makeAccusation(self, suspectID, roomID, weaponNum):
         #todo: this.
+        self.curSugP = suspectID
+        self.curSugL = roomID
+        self.curSugW = weaponNum
         # print("I accuse " + players[playerID] + " of committing the murder in the " + roomID + " with the " + weaponNum)
         # suggesterPlayer peaks at caseFile
         # if accusation is incorrect then suggesterPlayer loses the game
+        if self.cardController.checkAccusation(suspectID, roomID, weaponNum):
+            return True
         # else suggesterPlayer wins the game
+        else:
+            return False
         # caseFile is revealed to all players
 
         return
         
     def incrementTurn(self):
         #If on last player, loop back to first player.
-        if self.whoseTurn >= len(self.players) - 1:
-            self.whoseTurn = 0
-        else:
-            self.whoseTurn += 1
+        self.whoseTurn = self.rotate(self.whoseTurn)
             
         self.hasMoved = False
             
@@ -239,3 +254,9 @@ class Game(object):
             return self.players[playerID].myCardsR
         elif cardType == "W":
             return self.players[playerID].myCardsW
+            
+    def rotate(self, x):
+        if x >= len(self.players) - 1:
+            return 0
+        else:
+            return x + 1
