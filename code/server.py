@@ -114,6 +114,7 @@ class GameMenuServer(PodSixNet.Server.Server):
                             "numPlayers": TOTAL_PLAYERS})  
                     self.sendMessage("All player's have arrived. Let's begin!", p)
                 self.sendPositions()
+                self.sendTurns()
        
     #tell all clients all board positions
     def sendPositions(self):
@@ -210,33 +211,42 @@ class GameMenuServer(PodSixNet.Server.Server):
                     self.optionSet = "suggestionP"
                 else:
                     self.optionSet = "accusationP"
+                self.sendMessage("Who's the muderer?!", playerID)
                 self.sendOptions(PLAYER_NAMES[0:TOTAL_PLAYERS], playerID)
         elif self.optionSet == "suggestionP":
-            print("hello")
             self.curSugP = option
-            self.optionSet = "suggestionL"
-            self.sendOptions(ROOM_NAMES, playerID)
-        elif self.optionSet == "suggestionL":
-            self.curSugL = option
             self.optionSet = "suggestionW"
+            self.sendMessage("What was the weapon?", playerID)
+            #room must be current room
+            self.curSugL = self.game.getPlayerLocID(playerID)
             self.sendOptions(WEAPONS, playerID)
+        #elif self.optionSet == "suggestionL":
+        #    self.curSugL = option
+        #    self.optionSet = "suggestionW"
+        #    self.sendMessage("What was the weapon?", playerID)
+        #    self.sendOptions(WEAPONS, playerID)
+        
         elif self.optionSet == "suggestionW":
             self.curSugW = option
             self.optionSet = "disprove"
-            self.sendMessageAll("Interviewing witnesses...")
+            self.sendMessageAll(PLAYER_NAMES[playerID] + " suggests: '" +
+                                PLAYER_NAMES[self.curSugP] + " in the " +
+                                ROOM_NAMES[self.curSugL] + " with the " +
+                                WEAPONS[self.curSugW] + "!' Interviewing Witnesses...")
             self.game.makeSuggestion(playerID, self.curSugP, self.curSugL, self.curSugW)
+            self.sendPositions()
+            self.clearAllOptions()
             #self.sendOptions(???, ??playerID??)
-            
-            print("suggestion: ", self.curSugP, self.curSugL, self.curSugW)
-            
+         
         elif self.optionSet == "accusationP":
-            print("hello")
             self.curSugP = option
             self.optionSet = "accusationL"
+            self.sendMessage("Where did they do it?", playerID)
             self.sendOptions(ROOM_NAMES, playerID)
         elif self.optionSet == "accusationL":
             self.curSugL = option
             self.optionSet = "accusationW"
+            self.sendMessage("What was the weapon?", playerID)
             self.sendOptions(WEAPONS, playerID)
         elif self.optionSet == "accusationW":
             self.curSugW = option
@@ -245,6 +255,9 @@ class GameMenuServer(PodSixNet.Server.Server):
             if win:
                 self.clearAllOptions()
                 self.sendMessageAll(PLAYER_NAMES[playerID] + " WINS!!")
+            else:
+                self.clearAllOptions()
+                self.sendMessageAll(PLAYER_NAMES[playerID] + " falsely accused... They lose!")
             #self.sendOptions(???, ??playerID??)    
             
         

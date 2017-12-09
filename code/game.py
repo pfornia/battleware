@@ -143,10 +143,14 @@ class Game(object):
         #self.cardController.distributeCards() Done in initialization I think.
         
         
-    def makeMove(self, playerID, locID):
+    #override used for moving people for a suggestion: no isMoveLegal needed.
+    def makeMove(self, playerID, locID, override = False):
         location = self.locations[locID]
         player = self.players[playerID]
-        result = self.isMoveLegal(playerID, locID)
+        if override:
+            result = 0
+        else:
+            result = self.isMoveLegal(playerID, locID)
         if result == 0:
             #make the move
             player.move(location)
@@ -201,7 +205,12 @@ class Game(object):
         # print("I suggest the murder was done in " + roomID + " by " + suspectID + " with " + weaponNum)
         # Disprove suggestion
         # move suggesterPlayer to suspectRoom
-        self.makeMove(suspectID, roomID)
+        print(roomID)
+        print("before:")
+        print(self.getPlayerLocID(suspectID))
+        self.makeMove(suspectID, roomID, True)
+        print("after:")
+        print(self.getPlayerLocID(suspectID))
         # move suspectPlayer to suspectRoom
         # move suspectWeapon to suspectRoom
         # if suspectPlayer holds suspectPlayercard or suspectRoomcard or 
@@ -216,8 +225,6 @@ class Game(object):
 
         #suggesterPlayer makes an accusation or ends turn
 
-        return
-        
     def makeAccusation(self, suspectID, roomID, weaponNum):
         #todo: this.
         self.curSugP = suspectID
@@ -242,6 +249,7 @@ class Game(object):
         self.hasMoved = False
             
     def getPlayerLocID(self, playerID):
+        print("location: " + str(self.locations.index(self.players[playerID].curLocation)))
         return self.locations.index(self.players[playerID].curLocation)
         
     def getPlayerName(self, playerID):

@@ -70,35 +70,35 @@ class GameMenu(ConnectionListener):
         self.screen.fill(0)
         
         self.locations = []
-        self.locations.append(LocationIcon(500, 100, "study.jpg"))
-        self.locations.append(LocationIcon(700, 100, "hall.jpg"))
-        self.locations.append(LocationIcon(900, 100, "lounge.jpg"))
+        self.locations.append(LocationIcon(530, 130, "study.jpg"))
+        self.locations.append(LocationIcon(730, 130, "hall.jpg"))
+        self.locations.append(LocationIcon(930, 130, "lounge.jpg"))
         
-        self.locations.append(LocationIcon(500, 300, "library.jpg"))
-        self.locations.append(LocationIcon(700, 300, "billiard.jpg"))
-        self.locations.append(LocationIcon(900, 300, "dining.jpg"))
+        self.locations.append(LocationIcon(530, 330, "library.jpg"))
+        self.locations.append(LocationIcon(730, 330, "billiard.jpg"))
+        self.locations.append(LocationIcon(930, 330, "dining.jpg"))
         
-        self.locations.append(LocationIcon(500, 500, "conservatory.jpg"))
-        self.locations.append(LocationIcon(700, 500, "ballroom.jpg"))
-        self.locations.append(LocationIcon(900, 500, "kitchen.jpg"))
+        self.locations.append(LocationIcon(530, 530, "conservatory.jpg"))
+        self.locations.append(LocationIcon(730, 530, "ballroom.jpg"))
+        self.locations.append(LocationIcon(930, 530, "kitchen.jpg"))
         
         #Hallways
-        self.locations.append(LocationIcon(600, 100, "hallway_horiz.jpg"))
-        self.locations.append(LocationIcon(800, 100, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(630, 130, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(830, 130, "hallway_horiz.jpg"))
+       
+        self.locations.append(LocationIcon(530, 230, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(730, 230, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(930, 230, "hallway_vert.jpg"))
         
-        self.locations.append(LocationIcon(500, 200, "hallway_vert.jpg"))
-        self.locations.append(LocationIcon(700, 200, "hallway_vert.jpg"))
-        self.locations.append(LocationIcon(900, 200, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(630, 330, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(830, 330, "hallway_horiz.jpg"))
+       
+        self.locations.append(LocationIcon(530, 430, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(730, 430, "hallway_vert.jpg"))
+        self.locations.append(LocationIcon(930, 430, "hallway_vert.jpg"))
         
-        self.locations.append(LocationIcon(600, 300, "hallway_horiz.jpg"))
-        self.locations.append(LocationIcon(800, 300, "hallway_horiz.jpg"))
-        
-        self.locations.append(LocationIcon(500, 400, "hallway_vert.jpg"))
-        self.locations.append(LocationIcon(700, 400, "hallway_vert.jpg"))
-        self.locations.append(LocationIcon(900, 400, "hallway_vert.jpg"))
-        
-        self.locations.append(LocationIcon(600, 500, "hallway_horiz.jpg"))
-        self.locations.append(LocationIcon(800, 500, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(630, 530, "hallway_horiz.jpg"))
+        self.locations.append(LocationIcon(830, 530, "hallway_horiz.jpg"))
         
         self.playerIcons = []
         self.playerIcons.append(PlayerIcon("scarlet.jpg"))
@@ -200,9 +200,9 @@ class GameMenu(ConnectionListener):
         labelServer = myfont2.render(self.serverMessage, 1, (255,255,255))
 
         #draw surface
-        self.screen.blit(labelServer, (50, 50))
+        self.screen.blit(labelServer, (20, 40))
         
-        self.screen.blit(labelTitle, (10, 12))
+        self.screen.blit(labelTitle, (10, 8))
         curY = 80
         curX = 50
         
@@ -261,7 +261,6 @@ class GameMenu(ConnectionListener):
         #self.gameid=data["gameid"]
         self.gameStarted = True
         self.titleMessage = "Welcome " + PLAYER_NAMES[self.myPlayerID] + "!"
-        print(self.myPlayerID)
 
     def Network_setCards(self, data):
         
