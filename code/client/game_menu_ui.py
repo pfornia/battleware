@@ -124,12 +124,12 @@ class GameMenu(ConnectionListener):
             IPRange = ".".join(splitIP)
             #Not needed but saving it
             splitFields = str(localIP).split(',')
-            splitIP[1:] = (['1338)'])
+            splitIP[1:] = (['55123'])
             newAddress = ",".join(splitFields)
-            myLink = (str(onlyIP[1]),1338)
+            myLink = (str(onlyIP[1]),55123)
         except:
             print("No network connection found, trying localhost.")
-            myLink = ('localhost',1339)
+            myLink = ('localhost',55123)
         
         #wanLink = ('bw.nathansdoorway.com', 55123)
         
