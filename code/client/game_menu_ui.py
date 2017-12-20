@@ -51,7 +51,9 @@ class GameMenu(ConnectionListener):
     def __init__(self):
         pygame.init()
         pygame.font.init()
-        self.size = width, height = 1000, 600
+        self.width = 1000
+        self.height = 600
+        self.size = self.width, self.height
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Clue-Less!")
         
@@ -160,7 +162,6 @@ class GameMenu(ConnectionListener):
     
         connection.Pump()
         self.Pump()
-        
         #sleep to make the game 60 fps
         self.clock.tick(60)
     
@@ -168,22 +169,26 @@ class GameMenu(ConnectionListener):
             if event.type == pygame.QUIT: 
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
-                
-                mouse = pygame.mouse.get_pos()
-                for l in range(len(self.locations)):
-                    if self.locations[l].rect.collidepoint(mouse):
-                        print(l)
-                        self.Send({"action": "move", 
-                            "client": self.myPlayerID,
-                            "l":l})
+                if event.button == 1:
+                    mouse = pygame.mouse.get_pos()
+                    for l in range(len(self.locations)):
+                        if self.locations[l].rect.collidepoint(mouse):
+                            print(l)
+                            self.Send({"action": "move",
+                                "client": self.myPlayerID,
+                                "l":l})
                             
-                for b in range(len(self.serverOptionsButtons)):
-                    if self.serverOptionsButtons[b].rect.collidepoint(mouse):
-                        print(b)
-                        self.Send({"action": "selectOption", 
-                            "client": self.myPlayerID,
-                            "o":b})                    
-                
+                    for b in range(len(self.serverOptionsButtons)):
+                        if self.serverOptionsButtons[b].rect.collidepoint(mouse):
+                            print(b)
+                            self.Send({"action": "selectOption",
+                                "client": self.myPlayerID,
+                                "o":b})
+                elif event.button == 3:
+                    print("Left")
+                #####
+
+                #####
             self.screen.fill([0, 0, 0])
 
         for l in self.locations:
