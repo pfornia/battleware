@@ -40,7 +40,6 @@ class GameMenu(ConnectionListener):
     
     Many code snippets taken from 
     
-    
         pygame.org tutorials
         (especially https://www.pygame.org/docs/tut/ChimpLineByLine.html),
         https://www.raywenderlich.com/38732/multiplayer-game-programming-for-teens-with-python

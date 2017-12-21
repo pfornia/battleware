@@ -5,7 +5,6 @@ import time
 import os
 import threading
 
-
 class splashScreen(object):
     '''
     A simple splash logo with a timer,
