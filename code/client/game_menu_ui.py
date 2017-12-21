@@ -3,8 +3,9 @@ from time import sleep
 import os, sys
 import pygame
 from pygame.locals import *
+from splash import splashScreen
 
-from socket import socket, SOCK_DGRAM, AF_INET 
+from socket import socket, SOCK_DGRAM, AF_INET
 import socketserver
 
 #def main():
@@ -49,6 +50,7 @@ class GameMenu(ConnectionListener):
     '''
     
     def __init__(self):
+
         pygame.init()
         pygame.font.init()
         self.width = 1000
@@ -56,7 +58,7 @@ class GameMenu(ConnectionListener):
         self.size = self.width, self.height
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Clue-Less!")
-        
+
         self.titleMessage = "Waiting for more players..."
         self.serverMessage = ""
         self.serverOptions = []
@@ -135,7 +137,7 @@ class GameMenu(ConnectionListener):
         
         wanLink = ('10.10.4.176', 55123)
         
-	#Use this for above ip
+	    #Use this for above ip
         print("STARTING CLIENT ON " + str(wanLink))
         #self.Connect(wanLink)
         #The following uses localhost ip
@@ -158,6 +160,7 @@ class GameMenu(ConnectionListener):
             self.marker=self.blueplayer
             self.othermarker = self.greenplayer
         '''
+
     def update(self):
     
         connection.Pump()
@@ -185,7 +188,7 @@ class GameMenu(ConnectionListener):
                                 "client": self.myPlayerID,
                                 "o":b})
                 elif event.button == 3:
-                    print("Left")
+                    print("ToDo: Right-Click")
                 #####
 
                 #####
