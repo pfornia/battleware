@@ -171,7 +171,7 @@ class GameMenu(ConnectionListener):
             if event.type == pygame.QUIT: 
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
-                if event.button == 1 and self.numPlayers > 0:
+                if event.button == 1 and self.gameStarted == True:
                     mouse = pygame.mouse.get_pos()
                     for l in range(len(self.locations)):
                         if self.locations[l].rect.collidepoint(mouse):
