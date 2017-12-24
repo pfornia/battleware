@@ -22,6 +22,15 @@ class splashScreen(object):
         self.destRect = (0 , 0)
         self.splashSize = (500 , 80)
 
+        try:
+            s = threading.Thread( name='splash1' , target=self.run )
+            s.setDaemon( True )
+            s.start( )
+            s.join()
+        except:
+            print("Splash error")
+
+    def run(self):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init( )
 
@@ -38,15 +47,6 @@ class splashScreen(object):
         self.background = pygame.Surface( self.screen.get_size( ) )
         self.background.fill( self.black )
 
-        try:
-            s = threading.Thread( name='splash1' , target=self.run )
-            s.setDaemon( True )
-            s.start( )
-            s.join()
-        except:
-            print("Splash error")
-
-    def run(self):
         print( "Splash message." )
         self.screen.blit( self.background , self.destRect )
         self.screen.blit(self.font.render( 'Starting up Clue-Less...' , True , self.white ),self.fontPos )
