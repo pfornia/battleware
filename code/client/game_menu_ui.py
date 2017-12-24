@@ -50,8 +50,13 @@ class GameMenu(ConnectionListener):
     
     def __init__(self):
 
+        splashScreen()
         pygame.init()
-        pygame.font.init()
+        if not pygame.font.get_init( ):
+            pygame.font.init( )
+            if not pygame.font.get_init():
+                raise RuntimeError("pygame doesn't init")
+
         self.width = 1000
         self.height = 600
         self.size = self.width, self.height
