@@ -63,7 +63,7 @@ class GameMenu(ConnectionListener):
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Clue-Less!")
 
-        '''
+        '''This is for a Start menu 
         '''
         WHITE = (255 , 255 , 255)
         RED = (255 , 0 , 0)
@@ -91,8 +91,7 @@ class GameMenu(ConnectionListener):
 
         self.mouse_is_visible = True
         self.cur_item = None
-        time.sleep(5)
-        '''
+        '''End of Start menu
         '''
 
         self.titleMessage = "Welcome to Clue-Less..."
