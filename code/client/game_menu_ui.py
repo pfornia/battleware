@@ -1,6 +1,6 @@
 from PodSixNet.Connection import ConnectionListener, connection
 from time import sleep
-import os, sys
+import os, sys, time
 import pygame
 from pygame.locals import *
 from splash import splashScreen
@@ -63,7 +63,39 @@ class GameMenu(ConnectionListener):
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Clue-Less!")
 
-        self.titleMessage = "Waiting for more players..."
+        '''
+        '''
+        WHITE = (255 , 255 , 255)
+        RED = (255 , 0 , 0)
+        menu_items = ('Search', 'Local', 'Enter' 'Quit')
+        self.items = []
+        self.font = 'freesansbold.ttf'
+        self.fontSize = 30
+        self.font = pygame.font.Font( self.font , self.fontSize )
+        if not self.font:
+            print( "No font." )
+        func = {'Search for Game': print("Searching...") ,
+                 'Play Local' : print("Playing local...") ,
+                 'Enter server address.': print("Entering address") ,
+                 'Quit': sys.exit}
+        for item in enumerate(func.keys()):
+            # t _h: total height of text block
+            t_h = len(func.keys())
+            pos_x = (0)
+            # This line includes a bug fix by Ariel (Thanks!)
+            # Please check the comments section of pt. 2 for an explanation
+            pos_y = (0)
+            self.fontPos = pos_x, pos_y
+            self.items.append(func.keys())
+            self.font.render(str(item), True, WHITE, self.fontPos)
+
+        self.mouse_is_visible = True
+        self.cur_item = None
+        time.sleep(5)
+        '''
+        '''
+
+        self.titleMessage = "Welcome to Clue-Less..."
         self.serverMessage = ""
         self.serverOptions = []
         self.serverOptionsButtons = []
@@ -138,15 +170,16 @@ class GameMenu(ConnectionListener):
         except:
             print("No network connection found, trying localhost.")
             myLink = ('localhost',55123)
-        
+
+        ##wanLink for testing remote game
         wanLink = ('10.10.4.176', 55123)
         
 	    #Use this for above ip
-        print("STARTING CLIENT ON " + str(wanLink))
+        print("STARTING CLIENT ON " + str(myLink))
         #self.Connect(wanLink)
         #The following uses localhost ip
         #print("STARTING CLIENT ON " + str(myLink))
-        self.Connect(wanLink)
+        self.Connect(myLink)
         
         '''
         self.running=False
@@ -193,6 +226,7 @@ class GameMenu(ConnectionListener):
                                 "o":b})
                 elif event.button == 3:
                     print("ToDo: Right-Click")
+
                 #####
 
                 #####

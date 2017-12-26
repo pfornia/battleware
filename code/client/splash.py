@@ -18,7 +18,7 @@ class splashScreen(object):
         self.font = 'freesansbold.ttf'
         self.fontSize = 40
         self.fontPos = (25 , 20)
-        self.secSleep = 3
+        self.secSleep = 2
         self.destRect = (0 , 0)
         self.splashSize = (500 , 80)
 
